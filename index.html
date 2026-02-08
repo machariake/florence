@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Happy Valentine's Day Florence! 💕</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -130,6 +130,50 @@
             text-align: center;
             padding: 0 1rem;
         }
+        .love-coupon {
+            background: linear-gradient(135deg, #ff6b6b, #ff4757);
+            color: white;
+            padding: 1rem;
+            border-radius: 1rem;
+            text-align: center;
+            margin: 0.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .love-coupon:hover {
+            transform: scale(1.05);
+        }
+        .snowflake {
+            position: absolute;
+            color: #fff;
+            font-size: 1.5rem;
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .raindrop {
+            position: absolute;
+            background: linear-gradient(to bottom, rgba(135, 206, 250, 0.8), rgba(135, 206, 250, 0.2));
+            width: 2px;
+            height: 15px;
+            border-radius: 0 0 5px 5px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .leaf {
+            position: absolute;
+            font-size: 1.2rem;
+            opacity: 0.7;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .flower {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 1;
+        }
         @media (max-width: 768px) {
             .text-4xl { font-size: 1.875rem; }
             .p-6 { padding: 1.5rem; }
@@ -151,6 +195,9 @@
     
     <!-- Confetti Container -->
     <div id="confetti-container" class="confetti-overlay"></div>
+
+    <!-- Seasonal Effects Container -->
+    <div id="seasonal-effects" class="fixed inset-0 pointer-events-none z-5"></div>
 
     <!-- Home Page -->
     <div id="home-page" class="min-h-screen flex flex-col items-center justify-center px-4 py-8 content-wrapper">
@@ -202,6 +249,21 @@
                     <p class="text-pink-600 mt-2">With all my love, Macharia 💝</p>
                 </div>
 
+                <!-- Our Song Player -->
+                <div class="w-full max-w-2xl bg-white/90 backdrop-blur-sm rounded-2xl p-4 mb-6 shadow-lg">
+                    <h3 class="text-center font-bold text-blue-700 mb-3">Our Special Song 🎵</h3>
+                    <div class="flex flex-col items-center">
+                        <audio id="our-song" controls class="w-full max-w-md">
+                            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <p class="text-sm text-gray-600 mt-2 text-center">
+                            "Every time I hear this song, I think of our first dance together 💃🕺"
+                        </p>
+                        <p class="text-xs text-pink-600 mt-1">- Macharia ❤️</p>
+                    </div>
+                </div>
+
                 <!-- Reasons I Love You Carousel -->
                 <div class="w-full max-w-2xl bg-white/90 backdrop-blur-sm rounded-2xl p-4 mb-6 shadow-lg">
                     <h3 class="text-center font-bold text-pink-700 mb-2">Reasons I Love You 💖</h3>
@@ -233,6 +295,14 @@
                 <div class="w-full max-w-2xl bg-white/90 backdrop-blur-sm rounded-2xl p-4 mb-6 shadow-lg">
                     <h3 class="text-center font-bold text-purple-700 mb-4">Our Love Timeline 📅</h3>
                     <div class="timeline" id="love-timeline">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Love Coupons -->
+                <div class="w-full max-w-2xl bg-white/90 backdrop-blur-sm rounded-2xl p-4 mb-6 shadow-lg">
+                    <h3 class="text-center font-bold text-green-700 mb-4">Love Coupons 💝</h3>
+                    <div class="flex flex-wrap justify-center" id="love-coupons">
                         <!-- Populated by JavaScript -->
                     </div>
                 </div>
@@ -355,8 +425,19 @@
             }
         ];
 
+        // Love coupons
+        const loveCoupons = [
+            { title: "One Home-Cooked Dinner", description: "Any dish of your choice! 🍽️" },
+            { title: "Movie Night", description: "Your pick, my treat! 🎬" },
+            { title: "Massage Session", description: "30 minutes of pure relaxation 💆‍♀️" },
+            { title: "Weekend Getaway", description: "Just you and me! ✈️" },
+            { title: "No Chores Day", description: "I'll handle everything! 🧹" },
+            { title: "Flower Delivery", description: "Fresh roses to brighten your day! 🌹" }
+        ];
+
         let currentPhotoIndex = 0;
         let confettiTimeout;
+        let seasonalInterval;
 
         // Create floating hearts
         function createFloatingHearts() {
@@ -461,6 +542,9 @@
                 
                 // Initialize main page features
                 initMainPage();
+                initSeasonalEffects();
+                setupShakeDetection();
+                setupVoiceRecorder();
             }, 2000);
         }
 
@@ -470,6 +554,7 @@
             changePhoto();
             populateReasonsCarousel();
             populateLoveTimeline();
+            populateLoveCoupons();
             startReasonsCarousel();
         }
 
@@ -518,6 +603,26 @@
                     </div>
                 `;
                 container.appendChild(timelineItem);
+            });
+        }
+
+        // Populate love coupons
+        function populateLoveCoupons() {
+            const container = document.getElementById('love-coupons');
+            container.innerHTML = '';
+            
+            loveCoupons.forEach(coupon => {
+                const couponDiv = document.createElement('div');
+                couponDiv.className = 'love-coupon';
+                couponDiv.innerHTML = `
+                    <h4 class="font-bold">${coupon.title}</h4>
+                    <p class="text-xs opacity-90">${coupon.description}</p>
+                `;
+                couponDiv.onclick = () => {
+                    alert(`🎉 ${coupon.title}!\n${coupon.description}\n\nThis coupon is valid forever! 💕\n\n- Macharia`);
+                    createConfetti();
+                };
+                container.appendChild(couponDiv);
             });
         }
 
@@ -798,6 +903,221 @@
                 buyBtn.className = 'px-4 py-2 rounded-lg font-semibold bg-gray-300 text-gray-500 cursor-not-allowed';
                 buyBtn.onclick = null;
                 buyBtn.disabled = true;
+            }
+        }
+
+        // Seasonal Effects System
+        function initSeasonalEffects() {
+            const now = new Date();
+            const month = now.getMonth(); // 0-11 (Jan-Dec)
+            
+            // Clear any existing effects
+            clearInterval(seasonalInterval);
+            document.getElementById('seasonal-effects').innerHTML = '';
+            
+            if (month >= 11 || month <= 1) {
+                // Winter (Dec, Jan, Feb)
+                createSnowEffect();
+            } else if (month >= 2 && month <= 4) {
+                // Spring (Mar, Apr, May)
+                createFlowerEffect();
+            } else if (month >= 5 && month <= 7) {
+                // Summer (Jun, Jul, Aug)
+                createSunEffect();
+            } else {
+                // Fall (Sep, Oct, Nov)
+                createLeafEffect();
+            }
+        }
+
+        function createSnowEffect() {
+            seasonalInterval = setInterval(() => {
+                const container = document.getElementById('seasonal-effects');
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.innerHTML = '❄️';
+                snowflake.style.left = Math.random() * 100 + '%';
+                snowflake.style.top = '-10px';
+                snowflake.style.opacity = Math.random() * 0.5 + 0.3;
+                snowflake.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                container.appendChild(snowflake);
+                
+                // Animate falling
+                let top = -10;
+                const fallInterval = setInterval(() => {
+                    top += 2;
+                    snowflake.style.top = top + 'px';
+                    if (top > window.innerHeight) {
+                        snowflake.remove();
+                        clearInterval(fallInterval);
+                    }
+                }, 50);
+            }, 300);
+        }
+
+        function createFlowerEffect() {
+            seasonalInterval = setInterval(() => {
+                const container = document.getElementById('seasonal-effects');
+                const flowers = ['🌸', '🌷', '🌼', '🌺'];
+                const flower = document.createElement('div');
+                flower.className = 'flower';
+                flower.innerHTML = flowers[Math.floor(Math.random() * flowers.length)];
+                flower.style.left = Math.random() * 100 + '%';
+                flower.style.top = Math.random() * 100 + '%';
+                flower.style.opacity = Math.random() * 0.4 + 0.3;
+                flower.style.fontSize = (Math.random() * 15 + 10) + 'px';
+                container.appendChild(flower);
+                
+                // Fade out after 3 seconds
+                setTimeout(() => {
+                    flower.style.transition = 'opacity 1s ease-out';
+                    flower.style.opacity = '0';
+                    setTimeout(() => flower.remove(), 1000);
+                }, 3000);
+            }, 2000);
+        }
+
+        function createSunEffect() {
+            // Add subtle sun rays or warm glow
+            const container = document.getElementById('seasonal-effects');
+            const sun = document.createElement('div');
+            sun.style.position = 'fixed';
+            sun.style.top = '20px';
+            sun.style.right = '20px';
+            sun.style.fontSize = '3rem';
+            sun.style.opacity = '0.3';
+            sun.innerHTML = '☀️';
+            container.appendChild(sun);
+        }
+
+        function createLeafEffect() {
+            seasonalInterval = setInterval(() => {
+                const container = document.getElementById('seasonal-effects');
+                const leaves = ['🍂', '🍁'];
+                const leaf = document.createElement('div');
+                leaf.className = 'leaf';
+                leaf.innerHTML = leaves[Math.floor(Math.random() * leaves.length)];
+                leaf.style.left = Math.random() * 100 + '%';
+                leaf.style.top = '-10px';
+                leaf.style.opacity = Math.random() * 0.5 + 0.3;
+                leaf.style.fontSize = (Math.random() * 15 + 10) + 'px';
+                container.appendChild(leaf);
+                
+                // Animate falling with drift
+                let top = -10;
+                let left = parseFloat(leaf.style.left);
+                const drift = (Math.random() - 0.5) * 2;
+                
+                const fallInterval = setInterval(() => {
+                    top += 3;
+                    left += drift;
+                    leaf.style.top = top + 'px';
+                    leaf.style.left = left + '%';
+                    if (top > window.innerHeight || left < -10 || left > 110) {
+                        leaf.remove();
+                        clearInterval(fallInterval);
+                    }
+                }, 50);
+            }, 500);
+        }
+
+        // Shake Detection for Mobile
+        function setupShakeDetection() {
+            if (window.DeviceMotionEvent) {
+                let lastUpdate = 0;
+                let lastX = 0, lastY = 0, lastZ = 0;
+                
+                window.addEventListener('devicemotion', (event) => {
+                    const currentTime = new Date().getTime();
+                    const diffTime = currentTime - lastUpdate;
+                    
+                    if (diffTime > 100) {
+                        lastUpdate = currentTime;
+                        const acceleration = event.accelerationIncludingGravity;
+                        const x = acceleration.x;
+                        const y = acceleration.y;
+                        const z = acceleration.z;
+                        
+                        const speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000;
+                        
+                        if (speed > 1000) {
+                            // Shake detected!
+                            const messages = [
+                                "You make my heart race, Florence! 💓",
+                                "Every shake reminds me of your beautiful laugh! 😊",
+                                "I love you more than words can say! 💕",
+                                "You're my everything, Florence! ✨",
+                                "Shake again for another reason why I love you! 💖"
+                            ];
+                            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                            alert(randomMessage + "\n\n- Macharia ❤️");
+                            createConfetti();
+                        }
+                        
+                        lastX = x;
+                        lastY = y;
+                        lastZ = z;
+                    }
+                });
+            }
+        }
+
+        // Voice Recorder (Simple version using MediaRecorder API)
+        function setupVoiceRecorder() {
+            const recordButton = document.createElement('button');
+            recordButton.innerHTML = '🎤 Record Voice Message';
+            recordButton.className = 'bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-lg font-semibold mt-4';
+            recordButton.onclick = startRecording;
+            
+            // Add to personal message section
+            const messageSection = document.querySelector('.bg-gradient-to-r.from-pink-100.to-red-100');
+            messageSection.appendChild(recordButton);
+        }
+
+        let mediaRecorder;
+        let audioChunks = [];
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+                
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    
+                    // Create audio player
+                    const audioPlayer = document.createElement('audio');
+                    audioPlayer.controls = true;
+                    audioPlayer.src = audioUrl;
+                    audioPlayer.className = 'w-full mt-2';
+                    
+                    // Replace record button with audio player
+                    const recordButton = document.querySelector('button[onclick="startRecording()"]');
+                    if (recordButton) {
+                        recordButton.replaceWith(audioPlayer);
+                    }
+                    
+                    alert("Beautiful voice message recorded! 💕\n\nI love hearing you say 'I love you, Macharia!' ❤️");
+                    createConfetti();
+                };
+                
+                mediaRecorder.start();
+                alert("Recording started! Speak your message to me, Florence! 🎤");
+                
+                // Stop recording after 10 seconds
+                setTimeout(() => {
+                    mediaRecorder.stop();
+                    stream.getTracks().forEach(track => track.stop());
+                }, 10000);
+                
+            } catch (error) {
+                alert("Sorry, voice recording isn't supported on your device. But I still love you! 💕\n\n- Macharia");
             }
         }
 
