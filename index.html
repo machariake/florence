@@ -2,27 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Valentine's Day Florence! 💕</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Poppins', 'system-ui', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { 
             background: linear-gradient(135deg, #fdf2f8 0%, #fef3c7 100%);
             min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
             overflow-x: hidden;
-            position: relative;
         }
         .floating-heart {
             position: absolute;
@@ -98,21 +87,6 @@
             position: relative;
             z-index: 10;
         }
-        .pulse-question {
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        .fade-in {
-            animation: fadeIn 1s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
         .timeline-item {
             position: relative;
             padding: 1rem 0;
@@ -135,32 +109,6 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             margin: 0 2rem;
         }
-        .rose-petal {
-            position: absolute;
-            opacity: 0.7;
-            pointer-events: none;
-            z-index: 1;
-        }
-        .word-search-grid {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 2px;
-            margin: 1rem 0;
-        }
-        .word-search-cell {
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 0.8rem;
-            background: #f8f9fa;
-            border-radius: 4px;
-        }
-        .word-search-cell.selected {
-            background: #ff6b6b;
-            color: white;
-        }
         .reasons-carousel {
             overflow: hidden;
             height: 120px;
@@ -182,64 +130,10 @@
             text-align: center;
             padding: 0 1rem;
         }
-        .star-map {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(to bottom, #1a1a2e, #16213e);
-            border-radius: 1rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle 3s infinite;
-        }
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-        .love-coupon {
-            background: linear-gradient(135deg, #ff6b6b, #ff4757);
-            color: white;
-            padding: 1rem;
-            border-radius: 1rem;
-            text-align: center;
-            margin: 0.5rem;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .love-coupon:hover {
-            transform: scale(1.05);
-        }
-        .future-dream {
-            background: white;
-            padding: 1rem;
-            border-radius: 1rem;
-            margin: 0.5rem 0;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .future-dream:hover {
-            background: #fff5f5;
-            transform: translateX(5px);
-        }
-        .gratitude-entry {
-            background: white;
-            padding: 1rem;
-            border-radius: 1rem;
-            margin: 0.5rem 0;
-        }
-        /* Mobile optimizations */
         @media (max-width: 768px) {
             .text-4xl { font-size: 1.875rem; }
-            .text-6xl { font-size: 2.25rem; }
             .p-6 { padding: 1.5rem; }
-            .gap-4 { gap: 1rem; }
             .game-card { padding: 0.75rem; }
-            .text-4xl { font-size: 1.5rem; }
-            .photo-container { border-width: 2px; }
             .timeline-item::before {
                 left: 1rem;
                 transform: translateX(0);
@@ -248,17 +142,6 @@
                 margin-left: 2.5rem;
                 margin-right: 1rem;
             }
-        }
-        @media (max-width: 480px) {
-            .text-2xl { font-size: 1.25rem; }
-            .text-4xl { font-size: 1.25rem; }
-            .text-6xl { font-size: 1.75rem; }
-            .p-6 { padding: 1rem; }
-            .grid-cols-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .gap-4 { gap: 0.75rem; }
-            .game-card { padding: 0.5rem; }
-            .text-lg { font-size: 0.875rem; }
-            .text-xl { font-size: 1rem; }
         }
     </style>
 </head>
@@ -269,14 +152,14 @@
     <!-- Confetti Container -->
     <div id="confetti-container" class="confetti-overlay"></div>
 
-    <!-- Home Page (Question Page) -->
+    <!-- Home Page -->
     <div id="home-page" class="min-h-screen flex flex-col items-center justify-center px-4 py-8 content-wrapper">
-        <div class="text-center fade-in">
+        <div class="text-center">
             <h1 class="text-4xl md:text-6xl font-bold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent mb-6">
                 Happy Valentine's Day!
             </h1>
             
-            <div class="pulse-question mb-8">
+            <div class="mb-8">
                 <div class="text-8xl mb-4">❓</div>
                 <h2 class="text-2xl md:text-4xl font-bold text-pink-700 mb-6">
                     Do you know how much I love you?
@@ -284,38 +167,39 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
-                <button onclick="wrongAnswer()" class="bg-gradient-to-r from-gray-400 to-gray-500 text-white p-4 rounded-xl font-semibold text-lg hover:scale-105 transition-transform">
+                <button onclick="wrongAnswer()" class="bg-gray-400 text-white p-4 rounded-xl font-semibold text-lg hover:scale-105 transition-transform">
                     Maybe a little? 🤔
                 </button>
-                <button onclick="wrongAnswer()" class="bg-gradient-to-r from-gray-400 to-gray-500 text-white p-4 rounded-xl font-semibold text-lg hover:scale-105 transition-transform">
+                <button onclick="wrongAnswer()" class="bg-gray-400 text-white p-4 rounded-xl font-semibold text-lg hover:scale-105 transition-transform">
                     Not really sure... 😅
                 </button>
-                <button onclick="wrongAnswer()" class="bg-gradient-to-r from-gray-400 to-gray-500 text-white p-4 rounded-xl font-semibold text-lg hover:scale-105 transition-transform">
+                <button onclick="wrongAnswer()" class="bg-gray-400 text-white p-4 rounded-xl font-semibold text-lg hover:scale-105 transition-transform">
                     Only sometimes? 🤷‍♀️
                 </button>
-                <button onclick="correctAnswer()" class="bg-gradient-to-r from-pink-500 to-red-500 text-white p-4 rounded-xl font-semibold text-lg hover:scale-105 transition-transform pulse-question">
+                <button onclick="correctAnswer()" class="bg-gradient-to-r from-pink-500 to-red-500 text-white p-4 rounded-xl font-semibold text-lg hover:scale-105 transition-transform">
                     More than anything in the world! 💖
                 </button>
             </div>
             
             <p class="text-pink-600 mt-8 text-center">
-                Choose wisely, my love... ❤️
+                From your loving Macharia ❤️
             </p>
         </div>
     </div>
 
-    <!-- Main Page (Hidden initially) -->
+    <!-- Main Page -->
     <div id="main-page" class="hidden min-h-screen">
-        <div class="scrollable-container content-wrapper">
-            <div class="flex flex-col items-center justify-start min-h-screen px-2 sm:px-4 py-4 sm:py-8">
-                <!-- Header -->
-                <div class="text-center mb-4 sm:mb-6 w-full">
-                    <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent mb-2">
+        <div class="content-wrapper">
+            <div class="flex flex-col items-center justify-start min-h-screen px-4 py-8">
+                <!-- Header with your name -->
+                <div class="text-center mb-6 w-full">
+                    <h1 class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent mb-2">
                         You're Absolutely Right! 💕
                     </h1>
-                    <h2 class="text-xl sm:text-2xl md:text-4xl font-semibold text-pink-700 animate-pulse">
-                        To My Beautiful Florence 💕
+                    <h2 class="text-xl md:text-3xl font-semibold text-pink-700">
+                        To My Beautiful Florence
                     </h2>
+                    <p class="text-pink-600 mt-2">With all my love, Macharia 💝</p>
                 </div>
 
                 <!-- Reasons I Love You Carousel -->
@@ -323,25 +207,25 @@
                     <h3 class="text-center font-bold text-pink-700 mb-2">Reasons I Love You 💖</h3>
                     <div class="reasons-carousel">
                         <div class="reasons-list" id="reasons-list">
-                            <!-- Will be populated by JavaScript -->
+                            <!-- Populated by JavaScript -->
                         </div>
                     </div>
                 </div>
 
                 <!-- Photo Showcase -->
-                <div class="relative w-full max-w-2xl sm:max-w-3xl mb-4 sm:mb-8">
+                <div class="relative w-full max-w-2xl mb-8">
                     <div class="photo-container" id="photo-container">
                         <img id="main-photo" src="https://image2url.com/r2/default/images/1770506370489-b79e04d1-aca7-4354-abc6-8aad9df292ff.jpg" alt="Florence" class="w-full h-auto object-cover">
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2 sm:p-4">
-                            <p class="text-white text-sm sm:text-lg font-medium text-center" id="photo-caption">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                            <p class="text-white text-lg font-medium text-center" id="photo-caption">
                                 My amazing chef Florence 🍳✨
                             </p>
                         </div>
                     </div>
 
-                    <div class="flex justify-center mt-2 sm:mt-4 space-x-1 sm:space-x-2" id="photo-dots">
-                        <button class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-pink-500 scale-125"></button>
-                        <button class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-white/50 hover:bg-white"></button>
+                    <div class="flex justify-center mt-4 space-x-2" id="photo-dots">
+                        <button class="w-3 h-3 rounded-full bg-pink-500 scale-125"></button>
+                        <button class="w-3 h-3 rounded-full bg-white/50 hover:bg-white"></button>
                     </div>
                 </div>
 
@@ -349,107 +233,51 @@
                 <div class="w-full max-w-2xl bg-white/90 backdrop-blur-sm rounded-2xl p-4 mb-6 shadow-lg">
                     <h3 class="text-center font-bold text-purple-700 mb-4">Our Love Timeline 📅</h3>
                     <div class="timeline" id="love-timeline">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Virtual Rose Garden -->
-                <div class="w-full max-w-2xl bg-white/90 backdrop-blur-sm rounded-2xl p-4 mb-6 shadow-lg">
-                    <h3 class="text-center font-bold text-red-700 mb-4">Virtual Rose Garden 🌹</h3>
-                    <div class="grid grid-cols-3 gap-4" id="rose-garden">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Star Map -->
-                <div class="w-full max-w-2xl bg-white/90 backdrop-blur-sm rounded-2xl p-4 mb-6 shadow-lg">
-                    <h3 class="text-center font-bold text-blue-700 mb-4">Star Map of Our First Date ✨</h3>
-                    <div class="star-map" id="star-map">
-                        <!-- Stars will be generated by JavaScript -->
-                    </div>
-                    <p class="text-center text-xs text-gray-600 mt-2">February 14, 2024 • 8:00 PM • Paris, France</p>
-                </div>
-
-                <!-- Love Coupons -->
-                <div class="w-full max-w-2xl bg-white/90 backdrop-blur-sm rounded-2xl p-4 mb-6 shadow-lg">
-                    <h3 class="text-center font-bold text-green-700 mb-4">Love Coupons 💝</h3>
-                    <div class="flex flex-wrap justify-center" id="love-coupons">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Future Dreams Board -->
-                <div class="w-full max-w-2xl bg-white/90 backdrop-blur-sm rounded-2xl p-4 mb-6 shadow-lg">
-                    <h3 class="text-center font-bold text-orange-700 mb-4">Our Future Dreams 🌈</h3>
-                    <div id="future-dreams">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Gratitude Journal -->
-                <div class="w-full max-w-2xl bg-white/90 backdrop-blur-sm rounded-2xl p-4 mb-6 shadow-lg">
-                    <h3 class="text-center font-bold text-teal-700 mb-4">Gratitude Journal 📓</h3>
-                    <textarea id="gratitude-input" placeholder="What are you grateful for today?" class="w-full h-24 p-2 border-2 border-pink-200 rounded-lg focus:border-pink-400 focus:outline-none resize-none mb-2"></textarea>
-                    <button onclick="addGratitudeEntry()" class="bg-gradient-to-r from-teal-500 to-green-500 text-white px-4 py-2 rounded-lg font-semibold text-sm">Add Entry</button>
-                    <div id="gratitude-entries" class="mt-2">
-                        <!-- Entries will be added here -->
+                        <!-- Populated by JavaScript -->
                     </div>
                 </div>
 
                 <!-- Game Selection Menu -->
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-8 max-w-xl sm:max-w-2xl w-full" id="game-menu">
+                <div class="grid grid-cols-2 gap-4 mb-8 max-w-xl w-full">
                     <div class="game-card bg-gradient-to-r from-pink-400 to-red-400 text-white" onclick="showGame('memory')">
-                        <div class="text-2xl sm:text-4xl mb-1 sm:mb-2">🎴</div>
-                        <span class="font-semibold text-xs sm:text-lg">Memory Match</span>
+                        <div class="text-4xl mb-2">🎴</div>
+                        <span class="font-semibold">Memory Match</span>
                     </div>
-
                     <div class="game-card bg-gradient-to-r from-purple-400 to-pink-400 text-white" onclick="showGame('quiz')">
-                        <div class="text-2xl sm:text-4xl mb-1 sm:mb-2">❓</div>
-                        <span class="font-semibold text-xs sm:text-lg">Love Quiz</span>
+                        <div class="text-4xl mb-2">❓</div>
+                        <span class="font-semibold">Love Quiz</span>
                     </div>
-
                     <div class="game-card bg-gradient-to-r from-red-400 to-orange-400 text-white" onclick="showGame('clicker')">
-                        <div class="text-2xl sm:text-4xl mb-1 sm:mb-2">❤️</div>
-                        <span class="font-semibold text-xs sm:text-lg">Heart Clicker</span>
+                        <div class="text-4xl mb-2">❤️</div>
+                        <span class="font-semibold">Heart Clicker</span>
                     </div>
-
-                    <div class="game-card bg-gradient-to-r from-blue-400 to-purple-400 text-white" onclick="showGame('letter')">
-                        <div class="text-2xl sm:text-4xl mb-1 sm:mb-2">💌</div>
-                        <span class="font-semibold text-xs sm:text-lg">Love Letter</span>
-                    </div>
-
-                    <div class="game-card bg-gradient-to-r from-green-400 to-teal-400 text-white" onclick="showGame('wordsearch')">
-                        <div class="text-2xl sm:text-4xl mb-1 sm:mb-2">🔍</div>
-                        <span class="font-semibold text-xs sm:text-lg">Word Search</span>
-                    </div>
-
-                    <div class="game-card bg-gradient-to-r from-yellow-400 to-orange-400 text-white" onclick="showGame('guessmemory')">
-                        <div class="text-2xl sm:text-4xl mb-1 sm:mb-2">📸</div>
-                        <span class="font-semibold text-xs sm:text-lg">Guess Memory</span>
+                    <div class="game-card bg-gradient-to-r from-blue-400 to-purple-400 text-white" onclick="createConfetti()">
+                        <div class="text-4xl mb-2">🎉</div>
+                        <span class="font-semibold">Confetti Party</span>
                     </div>
                 </div>
 
                 <!-- Games Container -->
-                <div id="games-container" class="w-full max-w-xl sm:max-w-2xl mb-4"></div>
+                <div id="games-container" class="w-full max-w-xl mb-8"></div>
 
-                <!-- Personal Message -->
-                <div class="bg-gradient-to-r from-pink-100 to-red-100 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 max-w-xl sm:max-w-2xl w-full relative overflow-hidden mb-4 sm:mb-8">
-                    <div class="absolute top-2 sm:top-4 right-2 sm:right-4 animate-pulse text-sm sm:text-base">💖</div>
-                    <p class="text-xs sm:text-base md:text-lg text-gray-800 leading-relaxed text-center">
-                        Florence, seeing your beautiful smile in these photos reminds me of all 
-                        the wonderful moments we've shared. You're not just my girlfriend—you're 
-                        my best friend, my partner in crime, and the love of my life. 
-                        <span class="inline-block mx-1 animate-pulse text-sm sm:text-base">💕</span>
+                <!-- Personal Message from Macharia -->
+                <div class="bg-gradient-to-r from-pink-100 to-red-100 rounded-2xl p-6 max-w-2xl w-full text-center mb-8">
+                    <p class="text-lg text-gray-800 leading-relaxed">
+                        Florence, every day with you feels like a blessing. You've brought so much joy, 
+                        laughter, and love into my life. I'm so grateful to call you mine.
+                        <br><br>
+                        With all my heart,<br>
+                        Your Macharia 💕
                     </p>
                 </div>
 
                 <!-- Footer -->
-                <div class="mt-4 sm:mt-8 text-center px-2 pb-8">
-                    <p class="text-pink-600 font-semibold text-sm sm:text-lg">
-                        With all my love, always 💝
+                <div class="text-center">
+                    <p class="text-pink-600 font-semibold text-lg">
+                        Happy Valentine's Day 2026! 💝
                     </p>
-                    <p class="text-pink-500 text-xs sm:text-sm mt-1 sm:mt-2">
-                        Tap anywhere, play games, or explore for more magic! ✨
+                    <p class="text-pink-500 text-sm mt-2">
+                        Made with love by Macharia just for you! ✨
                     </p>
                 </div>
             </div>
@@ -469,7 +297,7 @@
             }
         ];
 
-        // Reasons I love you
+        // Reasons I love you (from Macharia to Florence)
         const reasonsILoveYou = [
             "Your smile lights up my entire world 💫",
             "The way you laugh at my silly jokes 😊",
@@ -490,15 +318,10 @@
             "Your beautiful voice when you sing 🎵",
             "The way you care for others so deeply 💕",
             "Your adventurous spirit 🌍",
-            "How you make our house feel like home 🏠",
-            "Your patience with my quirks 😅",
-            "The way you support my dreams 🌟",
-            "Your intelligence and wisdom 🧠",
-            "How you make me feel loved every single day 💖",
-            "Your beautiful soul that shines through everything you do ✨"
+            "How you make our house feel like home 🏠"
         ];
 
-        // Love timeline data
+        // Love timeline data (Macharia & Florence's story)
         const loveTimeline = [
             {
                 date: "First Meeting",
@@ -532,61 +355,8 @@
             }
         ];
 
-        // Rose garden messages
-        const roseGarden = [
-            { color: "red", message: "You make my heart beat faster 💓", emoji: "🌹" },
-            { color: "pink", message: "Your kindness inspires me daily 💖", emoji: "🌸" },
-            { color: "white", message: "I want to grow old with you 👵👴", emoji: "💮" },
-            { color: "yellow", message: "Your friendship means everything 🤗", emoji: "🌼" },
-            { color: "orange", message: "Your passion lights my fire 🔥", emoji: "🌺" },
-            { color: "purple", message: "You're my soulmate forever 💜", emoji: "🪻" }
-        ];
-
-        // Word search words
-        const wordSearchWords = ["FLORENCE", "LOVE", "CHEF", "FOREVER", "SOULMATE", "VALENTINE", "HEART", "DREAMS"];
-
-        // Love coupons
-        const loveCoupons = [
-            { title: "One Home-Cooked Dinner", description: "Any dish of your choice! 🍽️" },
-            { title: "Movie Night", description: "Your pick, my treat! 🎬" },
-            { title: "Massage Session", description: "30 minutes of pure relaxation 💆‍♀️" },
-            { title: "Weekend Getaway", description: "Just you and me! ✈️" },
-            { title: "No Chores Day", description: "I'll handle everything! 🧹" },
-            { title: "Flower Delivery", description: "Fresh roses to brighten your day! 🌹" }
-        ];
-
-        // Future dreams
-        const futureDreams = [
-            { title: "Our Dream Home in Tuscany", description: "Vineyard views and Italian sunsets 🏡", image: "https://placehold.co/300x200/4ade80/ffffff?text=Tuscany+Home" },
-            { title: "World Travel Adventure", description: "Exploring every continent together ✈️", image: "https://placehold.co/300x200/3b82f6/ffffff?text=World+Travel" },
-            { title: "Family of Four", description: "Two kids and endless love 👨‍👩‍👧‍👦", image: "https://placehold.co/300x200/f59e0b/ffffff?text=Our+Family" },
-            { title: "Retirement Beach House", description: "Watching sunsets together forever 🏖️", image: "https://placehold.co/300x200/8b5cf6/ffffff?text=Beach+House" }
-        ];
-
-        // Guess the memory photos
-        const memoryPhotos = [
-            {
-                full: "https://placehold.co/400x300/ff6b6b/ffffff?text=Full+Photo+1",
-                cropped: "https://placehold.co/200x150/ff6b6b/ffffff?text=Cropped+1",
-                caption: "Our first vacation together! 🏖️"
-            },
-            {
-                full: "https://placehold.co/400x300/4ade80/ffffff?text=Full+Photo+2",
-                cropped: "https://placehold.co/200x150/4ade80/ffffff?text=Cropped+2",
-                caption: "Cooking together on Sunday mornings! 👨‍🍳"
-            },
-            {
-                full: "https://placehold.co/400x300/3b82f6/ffffff?text=Full+Photo+3",
-                cropped: "https://placehold.co/200x150/3b82f6/ffffff?text=Cropped+3",
-                caption: "Our cozy movie nights! 🎬"
-            }
-        ];
-
         let currentPhotoIndex = 0;
-        let heartsInterval;
         let confettiTimeout;
-        let reasonsIndex = 0;
-        let gratitudeEntries = [];
 
         // Create floating hearts
         function createFloatingHearts() {
@@ -602,7 +372,6 @@
                 heart.style.left = Math.random() * 100 + '%';
                 heart.style.top = Math.random() * 100 + '%';
                 heart.style.fontSize = (Math.random() * 16 + 8) + 'px';
-                heart.style.opacity = '0.6';
                 container.appendChild(heart);
                 
                 // Animate heart
@@ -647,7 +416,6 @@
                 confetti.style.top = '-10px';
                 confetti.style.color = colors[Math.floor(Math.random() * colors.length)];
                 confetti.style.fontSize = window.innerWidth < 480 ? '1rem' : '1.5rem';
-                confetti.style.opacity = '1';
                 container.appendChild(confetti);
                 
                 // Animate confetti falling
@@ -680,22 +448,13 @@
                 }, 1000);
             });
             
-            // Show gentle hint
-            const hint = document.createElement('div');
-            hint.className = 'text-pink-600 mt-4 text-center animate-bounce';
-            hint.innerHTML = 'Think again, my love! 💕';
-            document.querySelector('#home-page .text-center').appendChild(hint);
-            
-            setTimeout(() => {
-                hint.remove();
-            }, 3000);
+            alert('Think again, my love! 💕\n\nFrom Macharia ❤️');
         }
 
         // Handle correct answer
         function correctAnswer() {
             createConfetti();
             
-            // Hide home page and show main page
             setTimeout(() => {
                 document.getElementById('home-page').classList.add('hidden');
                 document.getElementById('main-page').classList.remove('hidden');
@@ -708,13 +467,9 @@
         // Initialize main page features
         function initMainPage() {
             createFloatingHearts();
-            changePhoto(); // Start photo rotation
+            changePhoto();
             populateReasonsCarousel();
             populateLoveTimeline();
-            populateRoseGarden();
-            createStarMap();
-            populateLoveCoupons();
-            populateFutureDreams();
             startReasonsCarousel();
         }
 
@@ -766,128 +521,6 @@
             });
         }
 
-        // Populate rose garden
-        function populateRoseGarden() {
-            const container = document.getElementById('rose-garden');
-            container.innerHTML = '';
-            
-            roseGarden.forEach(rose => {
-                const roseDiv = document.createElement('div');
-                roseDiv.className = 'text-center cursor-pointer hover:scale-110 transition-transform';
-                roseDiv.onclick = () => showRoseMessage(rose.message);
-                roseDiv.innerHTML = `
-                    <div class="text-4xl mb-2">${rose.emoji}</div>
-                    <p class="text-xs font-medium capitalize">${rose.color} rose</p>
-                `;
-                container.appendChild(roseDiv);
-            });
-        }
-
-        // Show rose message
-        function showRoseMessage(message) {
-            alert(`🌹 ${message} 🌹`);
-            createConfetti();
-        }
-
-        // Create star map
-        function createStarMap() {
-            const container = document.getElementById('star-map');
-            container.innerHTML = '';
-            
-            // Add stars
-            for (let i = 0; i < 50; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.width = Math.random() * 3 + 1 + 'px';
-                star.style.height = star.style.width;
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 5 + 's';
-                container.appendChild(star);
-            }
-            
-            // Add special constellation
-            const constellation = document.createElement('div');
-            constellation.style.position = 'absolute';
-            constellation.style.top = '50%';
-            constellation.style.left = '50%';
-            constellation.style.transform = 'translate(-50%, -50%)';
-            constellation.style.color = '#ff6b6b';
-            constellation.style.fontSize = '2rem';
-            constellation.innerHTML = '❤️';
-            container.appendChild(constellation);
-        }
-
-        // Populate love coupons
-        function populateLoveCoupons() {
-            const container = document.getElementById('love-coupons');
-            container.innerHTML = '';
-            
-            loveCoupons.forEach(coupon => {
-                const couponDiv = document.createElement('div');
-                couponDiv.className = 'love-coupon';
-                couponDiv.innerHTML = `
-                    <h4 class="font-bold">${coupon.title}</h4>
-                    <p class="text-xs opacity-90">${coupon.description}</p>
-                `;
-                couponDiv.onclick = () => {
-                    alert(`🎉 ${coupon.title}!\n${coupon.description}\n\nThis coupon is valid forever! 💕`);
-                    createConfetti();
-                };
-                container.appendChild(couponDiv);
-            });
-        }
-
-        // Populate future dreams
-        function populateFutureDreams() {
-            const container = document.getElementById('future-dreams');
-            container.innerHTML = '';
-            
-            futureDreams.forEach(dream => {
-                const dreamDiv = document.createElement('div');
-                dreamDiv.className = 'future-dream';
-                dreamDiv.innerHTML = `
-                    <img src="${dream.image}" alt="${dream.title}" class="w-full h-32 object-cover rounded-lg mb-2">
-                    <h4 class="font-bold text-lg">${dream.title}</h4>
-                    <p class="text-sm text-gray-600">${dream.description}</p>
-                `;
-                dreamDiv.onclick = () => {
-                    alert(`🌟 ${dream.title}\n\n${dream.description}\n\nI can't wait to make this dream come true with you! 💕`);
-                    createConfetti();
-                };
-                container.appendChild(dreamDiv);
-            });
-        }
-
-        // Add gratitude entry
-        function addGratitudeEntry() {
-            const input = document.getElementById('gratitude-input');
-            const text = input.value.trim();
-            
-            if (text) {
-                gratitudeEntries.push(text);
-                updateGratitudeEntries();
-                input.value = '';
-                createConfetti();
-            }
-        }
-
-        // Update gratitude entries
-        function updateGratitudeEntries() {
-            const container = document.getElementById('gratitude-entries');
-            container.innerHTML = '';
-            
-            gratitudeEntries.slice().reverse().forEach(entry => {
-                const entryDiv = document.createElement('div');
-                entryDiv.className = 'gratitude-entry';
-                entryDiv.innerHTML = `
-                    <p class="text-sm">${entry}</p>
-                    <p class="text-xs text-gray-500 mt-1">${new Date().toLocaleDateString()}</p>
-                `;
-                container.appendChild(entryDiv);
-            });
-        }
-
         // Change photo
         function changePhoto() {
             currentPhotoIndex = (currentPhotoIndex + 1) % florencePhotos.length;
@@ -898,9 +531,9 @@
             const dots = document.getElementById('photo-dots').children;
             for (let i = 0; i < dots.length; i++) {
                 if (i === currentPhotoIndex) {
-                    dots[i].className = 'w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-pink-500 scale-125';
+                    dots[i].className = 'w-3 h-3 rounded-full bg-pink-500 scale-125';
                 } else {
-                    dots[i].className = 'w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-white/50 hover:bg-white';
+                    dots[i].className = 'w-3 h-3 rounded-full bg-white/50 hover:bg-white';
                 }
             }
         }
@@ -914,153 +547,69 @@
             
             if (gameType === 'memory') {
                 container.innerHTML = `
-                    <div class="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-xl">
-                        <div class="flex justify-between items-center mb-3 sm:mb-4">
-                            <h3 class="text-lg sm:text-2xl font-bold text-pink-700">Memory Match 💕</h3>
-                            <button onclick="hideGame()" class="text-pink-600 hover:text-pink-800 font-semibold text-sm sm:text-base">Back</button>
+                    <div class="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-xl">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="text-lg font-bold text-pink-700">Memory Match 💕</h3>
+                            <button onclick="hideGame()" class="text-pink-600 hover:text-pink-800 font-semibold">Back</button>
                         </div>
-                        <div class="text-center mb-3 sm:mb-4">
-                            <p class="text-sm sm:text-base">Moves: <span id="moves-count">0</span></p>
+                        <div class="text-center mb-3">
+                            <p class="text-sm">Moves: <span id="moves-count">0</span></p>
                         </div>
-                        <div class="grid grid-cols-4 gap-1 sm:gap-2 mb-3 sm:mb-4" id="memory-grid">
+                        <div class="grid grid-cols-4 gap-2 mb-3" id="memory-grid">
                             <!-- Cards will be generated here -->
                         </div>
                         <div class="flex justify-center">
-                            <button onclick="resetMemoryGame()" class="bg-pink-500 text-white px-3 sm:px-4 py-2 rounded-lg font-semibold text-sm sm:text-base">Reset Game</button>
+                            <button onclick="resetMemoryGame()" class="bg-pink-500 text-white px-4 py-2 rounded-lg font-semibold">Reset Game</button>
                         </div>
                     </div>
                 `;
                 initMemoryGame();
             } else if (gameType === 'quiz') {
                 container.innerHTML = `
-                    <div class="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-xl">
-                        <div class="flex justify-between items-center mb-3 sm:mb-4">
-                            <h3 class="text-lg sm:text-2xl font-bold text-purple-700">Love Quiz 💖</h3>
-                            <button onclick="hideGame()" class="text-purple-600 hover:text-purple-800 font-semibold text-sm sm:text-base">Back</button>
+                    <div class="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-xl">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="text-lg font-bold text-purple-700">Love Quiz 💖</h3>
+                            <button onclick="hideGame()" class="text-purple-600 hover:text-purple-800 font-semibold">Back</button>
                         </div>
                         <div class="text-center" id="quiz-content">
-                            <p class="text-sm sm:text-lg mb-3 sm:mb-4">What's my favorite thing about you?</p>
-                            <div class="space-y-2 sm:space-y-3">
-                                <button onclick="answerQuiz(0)" class="w-full bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 p-2 sm:p-3 rounded-lg font-medium transition-all text-xs sm:text-base">Your smile</button>
-                                <button onclick="answerQuiz(1)" class="w-full bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 p-2 sm:p-3 rounded-lg font-medium transition-all text-xs sm:text-base">Your laugh</button>
-                                <button onclick="answerQuiz(2)" class="w-full bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 p-2 sm:p-3 rounded-lg font-medium transition-all text-xs sm:text-base">Your kindness</button>
-                                <button onclick="answerQuiz(3)" class="w-full bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 p-2 sm:p-3 rounded-lg font-medium transition-all text-xs sm:text-base">All of the above</button>
+                            <p class="text-sm mb-3">What's my favorite thing about you?</p>
+                            <div class="space-y-2">
+                                <button onclick="answerQuiz(0)" class="w-full bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 p-2 rounded-lg font-medium transition-all text-sm">Your smile</button>
+                                <button onclick="answerQuiz(1)" class="w-full bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 p-2 rounded-lg font-medium transition-all text-sm">Your laugh</button>
+                                <button onclick="answerQuiz(2)" class="w-full bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 p-2 rounded-lg font-medium transition-all text-sm">Your kindness</button>
+                                <button onclick="answerQuiz(3)" class="w-full bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 p-2 rounded-lg font-medium transition-all text-sm">All of the above</button>
                             </div>
-                            <p class="mt-2 sm:mt-4 text-xs sm:text-sm text-gray-600">Question 1 of 4</p>
+                            <p class="mt-2 text-xs text-gray-600">Question 1 of 4</p>
                         </div>
                     </div>
                 `;
             } else if (gameType === 'clicker') {
                 container.innerHTML = `
-                    <div class="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-xl">
-                        <div class="flex justify-between items-center mb-3 sm:mb-4">
-                            <h3 class="text-lg sm:text-2xl font-bold text-red-700">Heart Clicker ❤️</h3>
-                            <button onclick="hideGame()" class="text-red-600 hover:text-red-800 font-semibold text-sm sm:text-base">Back</button>
+                    <div class="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-xl">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="text-lg font-bold text-red-700">Heart Clicker ❤️</h3>
+                            <button onclick="hideGame()" class="text-red-600 hover:text-red-800 font-semibold">Back</button>
                         </div>
-                        <div class="text-center mb-4 sm:mb-6">
-                            <p class="text-xl sm:text-2xl font-bold text-red-600 mb-2" id="heart-count">0 ❤️</p>
-                            <p class="text-sm sm:text-lg">Multiplier: x<span id="multiplier-count">1</span></p>
+                        <div class="text-center mb-4">
+                            <p class="text-xl font-bold text-red-600 mb-2" id="heart-count">0 ❤️</p>
+                            <p class="text-sm">Multiplier: x<span id="multiplier-count">1</span></p>
                         </div>
-                        <div class="flex justify-center mb-4 sm:mb-6">
-                            <button onclick="clickHeart()" class="text-4xl sm:text-6xl hover:scale-110 transition-transform active:scale-95">❤️</button>
+                        <div class="flex justify-center mb-4">
+                            <button onclick="clickHeart()" class="text-6xl hover:scale-110 transition-transform active:scale-95">❤️</button>
                         </div>
-                        <div class="flex justify-center gap-2 sm:gap-4 mb-3 sm:mb-4">
-                            <button onclick="buyMultiplier()" id="buy-btn" class="px-3 sm:px-4 py-2 rounded-lg font-semibold text-xs sm:text-base bg-gray-300 text-gray-500 cursor-not-allowed">
+                        <div class="flex justify-center gap-4 mb-3">
+                            <button onclick="buyMultiplier()" id="buy-btn" class="px-4 py-2 rounded-lg font-semibold bg-gray-300 text-gray-500 cursor-not-allowed">
                                 Buy +1 Multiplier (20 ❤️)
                             </button>
                         </div>
                     </div>
                 `;
                 initClickerGame();
-            } else if (gameType === 'letter') {
-                container.innerHTML = `
-                    <div class="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-xl">
-                        <div class="flex justify-between items-center mb-3 sm:mb-4">
-                            <h3 class="text-lg sm:text-2xl font-bold text-blue-700">Love Letter 💌</h3>
-                            <button onclick="hideGame()" class="text-blue-600 hover:text-blue-800 font-semibold text-sm sm:text-base">Back</button>
-                        </div>
-                        <div class="text-center">
-                            <p class="mb-2 sm:mb-4 text-sm sm:text-base">Write me a sweet message, Florence! 💕</p>
-                            <textarea id="love-letter" placeholder="Type your loving message here..." class="w-full h-24 sm:h-32 p-2 sm:p-4 text-xs sm:text-base border-2 border-pink-200 rounded-lg focus:border-pink-400 focus:outline-none resize-none"></textarea>
-                            <button onclick="sendLetter()" id="send-letter-btn" class="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold mt-3 sm:mt-4 text-xs sm:text-base opacity-50 cursor-not-allowed">
-                                Send Love Letter 💌
-                            </button>
-                        </div>
-                    </div>
-                `;
-                setupLetterValidation();
-            } else if (gameType === 'wordsearch') {
-                container.innerHTML = `
-                    <div class="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-xl">
-                        <div class="flex justify-between items-center mb-3 sm:mb-4">
-                            <h3 class="text-lg sm:text-2xl font-bold text-green-700">Love Word Search 🔍</h3>
-                            <button onclick="hideGame()" class="text-green-600 hover:text-green-800 font-semibold text-sm sm:text-base">Back</button>
-                        </div>
-                        <p class="text-sm sm:text-base mb-3">Find these words: FLORENCE, LOVE, CHEF, FOREVER, SOULMATE, VALENTINE, HEART, DREAMS</p>
-                        <div class="word-search-grid" id="word-search-grid">
-                            <!-- Grid will be populated -->
-                        </div>
-                        <div class="flex flex-wrap gap-2 mb-3" id="found-words">
-                            <!-- Found words will appear here -->
-                        </div>
-                        <button onclick="resetWordSearch()" class="bg-green-500 text-white px-4 py-2 rounded-lg font-semibold text-sm">Reset Game</button>
-                    </div>
-                `;
-                initWordSearch();
-            } else if (gameType === 'guessmemory') {
-                container.innerHTML = `
-                    <div class="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-xl">
-                        <div class="flex justify-between items-center mb-3 sm:mb-4">
-                            <h3 class="text-lg sm:text-2xl font-bold text-orange-700">Guess the Memory 📸</h3>
-                            <button onclick="hideGame()" class="text-orange-600 hover:text-orange-800 font-semibold text-sm sm:text-base">Back</button>
-                        </div>
-                        <div class="text-center mb-4">
-                            <p class="text-sm sm:text-base mb-3">Can you guess what this photo shows?</p>
-                            <img id="cropped-photo" src="${memoryPhotos[0].cropped}" alt="Cropped photo" class="w-full max-w-xs h-auto rounded-lg mx-auto mb-3">
-                            <button onclick="revealFullPhoto(0)" class="bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold text-sm">Reveal Full Photo</button>
-                        </div>
-                        <div id="memory-photos" class="grid grid-cols-1 gap-3 mt-4">
-                            <!-- Additional memory photos will be added -->
-                        </div>
-                    </div>
-                `;
-                populateMemoryPhotos();
             }
         }
 
         function hideGame() {
             document.getElementById('games-container').innerHTML = '';
-        }
-
-        // Populate memory photos
-        function populateMemoryPhotos() {
-            const container = document.getElementById('memory-photos');
-            container.innerHTML = '';
-            
-            memoryPhotos.forEach((photo, index) => {
-                if (index > 0) {
-                    const photoDiv = document.createElement('div');
-                    photoDiv.className = 'text-center';
-                    photoDiv.innerHTML = `
-                        <img src="${photo.cropped}" alt="Cropped photo" class="w-full max-w-xs h-auto rounded-lg mx-auto mb-2">
-                        <button onclick="revealFullPhoto(${index})" class="bg-orange-500 text-white px-3 py-1 rounded-lg text-xs">Reveal</button>
-                    `;
-                    container.appendChild(photoDiv);
-                }
-            });
-        }
-
-        // Reveal full photo
-        function revealFullPhoto(index) {
-            const img = document.getElementById('cropped-photo');
-            img.src = memoryPhotos[index].full;
-            img.classList.add('animate-pulse');
-            setTimeout(() => {
-                img.classList.remove('animate-pulse');
-            }, 1000);
-            
-            alert(`📸 ${memoryPhotos[index].caption}`);
-            createConfetti();
         }
 
         // Memory Game Logic
@@ -1120,7 +669,7 @@
                     
                     if (memoryGame.matched.length === memoryGame.cards.length) {
                         setTimeout(() => {
-                            alert('🎉 Congratulations! You won! 🎉');
+                            alert('🎉 Congratulations! You won! 🎉\n\nFrom Macharia with love! 💕');
                             createConfetti();
                         }, 500);
                     }
@@ -1184,11 +733,11 @@
                 
                 document.getElementById('quiz-content').innerHTML = `
                     <div class="text-center">
-                        <div class="text-4xl sm:text-6xl mb-2 sm:mb-4 animate-pulse">🎉</div>
-                        <p class="text-lg sm:text-2xl font-bold text-green-600 mb-2">Quiz Complete!</p>
-                        <p class="text-base sm:text-xl mb-3 sm:mb-4">Your score: ${quizState.score} / ${quizQuestions.length}</p>
-                        <p class="text-sm sm:text-lg mb-4">${result}</p>
-                        <button onclick="resetQuiz()" class="bg-purple-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-xs sm:text-base">Play Again</button>
+                        <div class="text-6xl mb-2 animate-pulse">🎉</div>
+                        <p class="text-xl font-bold text-green-600 mb-2">Quiz Complete!</p>
+                        <p class="text-lg mb-3">Your score: ${quizState.score} / ${quizQuestions.length}</p>
+                        <p class="text-sm mb-4">${result}</p>
+                        <button onclick="resetQuiz()" class="bg-purple-500 text-white px-6 py-2 rounded-lg font-semibold">Play Again</button>
                     </div>
                 `;
                 createConfetti();
@@ -1198,13 +747,13 @@
         function updateQuizDisplay() {
             const question = quizQuestions[quizState.currentQuestion];
             document.getElementById('quiz-content').innerHTML = `
-                <p class="text-sm sm:text-lg mb-3 sm:mb-4">${question.question}</p>
-                <div class="space-y-2 sm:space-y-3">
+                <p class="text-sm mb-3">${question.question}</p>
+                <div class="space-y-2">
                     ${question.options.map((option, index) => 
-                        `<button onclick="answerQuiz(${index})" class="w-full bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 p-2 sm:p-3 rounded-lg font-medium transition-all text-xs sm:text-base">${option}</button>`
+                        `<button onclick="answerQuiz(${index})" class="w-full bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 p-2 rounded-lg font-medium transition-all text-sm">${option}</button>`
                     ).join('')}
                 </div>
-                <p class="mt-2 sm:mt-4 text-xs sm:text-sm text-gray-600">Question ${quizState.currentQuestion + 1} of ${quizQuestions.length}</p>
+                <p class="mt-2 text-xs text-gray-600">Question ${quizState.currentQuestion + 1} of ${quizQuestions.length}</p>
             `;
         }
 
@@ -1242,156 +791,14 @@
             
             const buyBtn = document.getElementById('buy-btn');
             if (clickerGame.hearts >= 20) {
-                buyBtn.className = 'px-3 sm:px-4 py-2 rounded-lg font-semibold text-xs sm:text-base bg-orange-500 text-white hover:bg-orange-600';
+                buyBtn.className = 'px-4 py-2 rounded-lg font-semibold bg-orange-500 text-white hover:bg-orange-600';
                 buyBtn.onclick = buyMultiplier;
                 buyBtn.disabled = false;
             } else {
-                buyBtn.className = 'px-3 sm:px-4 py-2 rounded-lg font-semibold text-xs sm:text-base bg-gray-300 text-gray-500 cursor-not-allowed';
+                buyBtn.className = 'px-4 py-2 rounded-lg font-semibold bg-gray-300 text-gray-500 cursor-not-allowed';
                 buyBtn.onclick = null;
                 buyBtn.disabled = true;
             }
-        }
-
-        // Letter Validation
-        function setupLetterValidation() {
-            const textarea = document.getElementById('love-letter');
-            const sendBtn = document.getElementById('send-letter-btn');
-            
-            textarea.addEventListener('input', () => {
-                if (textarea.value.trim()) {
-                    sendBtn.className = 'bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold mt-3 sm:mt-4 text-xs sm:text-base';
-                    sendBtn.onclick = sendLetter;
-                    sendBtn.disabled = false;
-                } else {
-                    sendBtn.className = 'bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold mt-3 sm:mt-4 text-xs sm:text-base opacity-50 cursor-not-allowed';
-                    sendBtn.onclick = null;
-                    sendBtn.disabled = true;
-                }
-            });
-        }
-
-        function sendLetter() {
-            const letter = document.getElementById('love-letter').value;
-            if (!letter.trim()) return;
-            
-            document.getElementById('games-container').innerHTML = `
-                <div class="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-xl text-center">
-                    <div class="text-4xl sm:text-6xl mb-2 sm:mb-4 animate-pulse">💌</div>
-                    <p class="text-lg sm:text-2xl font-bold text-blue-600 mb-2">Thank you for your beautiful message!</p>
-                    <div class="bg-pink-50 p-3 sm:p-4 rounded-lg mb-3 sm:mb-4">
-                        <p class="italic text-xs sm:text-base">"${letter}"</p>
-                    </div>
-                    <p class="text-sm sm:text-lg mb-4">Every word from you means the world to me, Florence! 💖</p>
-                    <button onclick="showGame('letter')" class="bg-blue-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-xs sm:text-base">Write Another Letter</button>
-                </div>
-            `;
-        }
-
-        // Word Search Game
-        let wordSearchGame = {
-            grid: [],
-            selectedCells: [],
-            foundWords: [],
-            wordsToFind: [...wordSearchWords]
-        };
-
-        function initWordSearch() {
-            // Create 10x10 grid filled with random letters
-            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            wordSearchGame.grid = Array(10).fill().map(() => Array(10).fill().map(() => letters[Math.floor(Math.random() * letters.length)]));
-            
-            // Place words horizontally
-            wordSearchWords.forEach(word => {
-                const row = Math.floor(Math.random() * 10);
-                const col = Math.floor(Math.random() * (10 - word.length));
-                for (let i = 0; i < word.length; i++) {
-                    wordSearchGame.grid[row][col + i] = word[i];
-                }
-            });
-            
-            renderWordSearchGrid();
-        }
-
-        function renderWordSearchGrid() {
-            const gridContainer = document.getElementById('word-search-grid');
-            gridContainer.innerHTML = '';
-            
-            for (let row = 0; row < 10; row++) {
-                for (let col = 0; col < 10; col++) {
-                    const cell = document.createElement('div');
-                    cell.className = 'word-search-cell';
-                    cell.textContent = wordSearchGame.grid[row][col];
-                    cell.dataset.row = row;
-                    cell.dataset.col = col;
-                    cell.onclick = () => selectWordSearchCell(row, col);
-                    gridContainer.appendChild(cell);
-                }
-            }
-        }
-
-        function selectWordSearchCell(row, col) {
-            const cellIndex = row * 10 + col;
-            const cell = document.querySelector(`.word-search-cell[data-row="${row}"][data-col="${col}"]`);
-            
-            if (wordSearchGame.selectedCells.includes(cellIndex)) {
-                // Deselect
-                wordSearchGame.selectedCells = wordSearchGame.selectedCells.filter(i => i !== cellIndex);
-                cell.classList.remove('selected');
-            } else {
-                // Select
-                wordSearchGame.selectedCells.push(cellIndex);
-                cell.classList.add('selected');
-            }
-            
-            checkForWords();
-        }
-
-        function checkForWords() {
-            if (wordSearchGame.selectedCells.length === 0) return;
-            
-            // Get selected letters
-            let selectedLetters = '';
-            wordSearchGame.selectedCells.forEach(index => {
-                const row = Math.floor(index / 10);
-                const col = index % 10;
-                selectedLetters += wordSearchGame.grid[row][col];
-            });
-            
-            // Check if any word matches
-            const foundWord = wordSearchWords.find(word => 
-                selectedLetters === word || selectedLetters === word.split('').reverse().join('')
-            );
-            
-            if (foundWord && !wordSearchGame.foundWords.includes(foundWord)) {
-                wordSearchGame.foundWords.push(foundWord);
-                updateFoundWords();
-                
-                if (wordSearchGame.foundWords.length === wordSearchWords.length) {
-                    setTimeout(() => {
-                        alert('🎉 You found all the words! You\'re amazing! 🎉');
-                        createConfetti();
-                    }, 500);
-                }
-            }
-        }
-
-        function updateFoundWords() {
-            const container = document.getElementById('found-words');
-            container.innerHTML = '';
-            wordSearchGame.foundWords.forEach(word => {
-                const span = document.createElement('span');
-                span.className = 'bg-green-200 text-green-800 px-2 py-1 rounded text-xs';
-                span.textContent = word;
-                container.appendChild(span);
-            });
-        }
-
-        function resetWordSearch() {
-            wordSearchGame.selectedCells = [];
-            wordSearchGame.foundWords = [];
-            document.getElementById('found-words').innerHTML = '';
-            const cells = document.querySelectorAll('.word-search-cell');
-            cells.forEach(cell => cell.classList.remove('selected'));
         }
 
         // Initialize home page
