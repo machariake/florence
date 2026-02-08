@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Happy Valentine's Day Florence! 💕</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -22,6 +22,7 @@
             background: linear-gradient(135deg, #fdf2f8 0%, #fef3c7 100%);
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
         }
         .floating-heart {
             position: absolute;
@@ -75,13 +76,6 @@
         .memory-card.flipped {
             background: white;
         }
-        .btn-glow {
-            animation: glow 2s infinite alternate;
-        }
-        @keyframes glow {
-            from { box-shadow: 0 0 5px #ff6b6b; }
-            to { box-shadow: 0 0 20px #ff6b6b, 0 0 30px #ff4757; }
-        }
         /* Mobile optimizations */
         @media (max-width: 768px) {
             .text-4xl { font-size: 1.875rem; }
@@ -103,99 +97,129 @@
             .text-lg { font-size: 0.875rem; }
             .text-xl { font-size: 1rem; }
         }
+        /* Scrollable container fixes */
+        .scrollable-container {
+            min-height: 100vh;
+            padding-bottom: 2rem;
+        }
+        .hearts-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .confetti-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+        }
     </style>
 </head>
-<body class="min-h-screen relative overflow-hidden">
-    <!-- Floating Hearts Background -->
-    <div id="hearts-container" class="fixed inset-0 pointer-events-none"></div>
+<body class="relative">
+    <!-- Floating Hearts Background (fixed position) -->
+    <div id="hearts-container" class="hearts-background"></div>
     
-    <!-- Confetti Container -->
-    <div id="confetti-container" class="fixed inset-0 pointer-events-none"></div>
+    <!-- Confetti Container (fixed position) -->
+    <div id="confetti-container" class="confetti-overlay"></div>
 
-    <!-- Main Content -->
-    <div class="relative z-10 flex flex-col items-center justify-center min-h-screen px-2 sm:px-4 py-4 sm:py-8">
-        <!-- Header -->
-        <div class="text-center mb-4 sm:mb-6 w-full">
-            <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent mb-2">
-                Happy Valentine's Day!
-            </h1>
-            <h2 class="text-xl sm:text-2xl md:text-4xl font-semibold text-pink-700 animate-pulse">
-                To My Beautiful Florence 💕
-            </h2>
-        </div>
+    <!-- Scrollable Content -->
+    <div class="scrollable-container content-wrapper">
+        <!-- Main Content -->
+        <div class="flex flex-col items-center justify-start min-h-screen px-2 sm:px-4 py-4 sm:py-8">
+            <!-- Header -->
+            <div class="text-center mb-4 sm:mb-6 w-full">
+                <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent mb-2">
+                    Happy Valentine's Day!
+                </h1>
+                <h2 class="text-xl sm:text-2xl md:text-4xl font-semibold text-pink-700 animate-pulse">
+                    To My Beautiful Florence 💕
+                </h2>
+            </div>
 
-        <!-- Photo Showcase -->
-        <div class="relative w-full max-w-2xl sm:max-w-3xl mb-4 sm:mb-8">
-            <div class="photo-container" id="photo-container">
-                <img id="main-photo" src="https://image2url.com/r2/default/images/1770506370489-b79e04d1-aca7-4354-abc6-8aad9df292ff.jpg" alt="Florence" class="w-full h-auto object-cover">
-                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2 sm:p-4">
-                    <p class="text-white text-sm sm:text-lg font-medium text-center" id="photo-caption">
-                        My amazing chef Florence 🍳✨
-                    </p>
+            <!-- Photo Showcase -->
+            <div class="relative w-full max-w-2xl sm:max-w-3xl mb-4 sm:mb-8">
+                <div class="photo-container" id="photo-container">
+                    <img id="main-photo" src="https://image2url.com/r2/default/images/1770506370489-b79e04d1-aca7-4354-abc6-8aad9df292ff.jpg" alt="Florence" class="w-full h-auto object-cover">
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2 sm:p-4">
+                        <p class="text-white text-sm sm:text-lg font-medium text-center" id="photo-caption">
+                            My amazing chef Florence 🍳✨
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex justify-center mt-2 sm:mt-4 space-x-1 sm:space-x-2" id="photo-dots">
+                    <button class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-pink-500 scale-125"></button>
+                    <button class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-white/50 hover:bg-white"></button>
                 </div>
             </div>
 
-            <div class="flex justify-center mt-2 sm:mt-4 space-x-1 sm:space-x-2" id="photo-dots">
-                <button class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-pink-500 scale-125"></button>
-                <button class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-white/50 hover:bg-white"></button>
+            <!-- Game Selection Menu -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-8 max-w-xl sm:max-w-2xl w-full" id="game-menu">
+                <div class="game-card bg-gradient-to-r from-pink-400 to-red-400 text-white" onclick="showGame('memory')">
+                    <div class="text-2xl sm:text-4xl mb-1 sm:mb-2">🎴</div>
+                    <span class="font-semibold text-xs sm:text-lg">Memory Match</span>
+                </div>
+
+                <div class="game-card bg-gradient-to-r from-purple-400 to-pink-400 text-white" onclick="showGame('quiz')">
+                    <div class="text-2xl sm:text-4xl mb-1 sm:mb-2">❓</div>
+                    <span class="font-semibold text-xs sm:text-lg">Love Quiz</span>
+                </div>
+
+                <div class="game-card bg-gradient-to-r from-red-400 to-orange-400 text-white" onclick="showGame('clicker')">
+                    <div class="text-2xl sm:text-4xl mb-1 sm:mb-2">❤️</div>
+                    <span class="font-semibold text-xs sm:text-lg">Heart Clicker</span>
+                </div>
+
+                <div class="game-card bg-gradient-to-r from-blue-400 to-purple-400 text-white" onclick="showGame('letter')">
+                    <div class="text-2xl sm:text-4xl mb-1 sm:mb-2">💌</div>
+                    <span class="font-semibold text-xs sm:text-lg">Love Letter</span>
+                </div>
+
+                <div class="game-card bg-gradient-to-r from-green-400 to-teal-400 text-white" onclick="createConfetti()">
+                    <div class="text-2xl sm:text-4xl mb-1 sm:mb-2">🎉</div>
+                    <span class="font-semibold text-xs sm:text-lg">Confetti Party</span>
+                </div>
+
+                <div class="game-card bg-gradient-to-r from-yellow-400 to-orange-400 text-white" onclick="changePhoto()">
+                    <div class="text-2xl sm:text-4xl mb-1 sm:mb-2">📸</div>
+                    <span class="font-semibold text-xs sm:text-lg">Surprise Photo</span>
+                </div>
             </div>
-        </div>
 
-        <!-- Game Selection Menu -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-8 max-w-xl sm:max-w-2xl w-full" id="game-menu">
-            <div class="game-card bg-gradient-to-r from-pink-400 to-red-400 text-white" onclick="showGame('memory')">
-                <div class="text-2xl sm:text-4xl mb-1 sm:mb-2">🎴</div>
-                <span class="font-semibold text-xs sm:text-lg">Memory Match</span>
+            <!-- Games Container -->
+            <div id="games-container" class="w-full max-w-xl sm:max-w-2xl mb-4"></div>
+
+            <!-- Personal Message -->
+            <div class="bg-gradient-to-r from-pink-100 to-red-100 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 max-w-xl sm:max-w-2xl w-full relative overflow-hidden mb-4 sm:mb-8">
+                <div class="absolute top-2 sm:top-4 right-2 sm:right-4 animate-pulse text-sm sm:text-base">💖</div>
+                <p class="text-xs sm:text-base md:text-lg text-gray-800 leading-relaxed text-center">
+                    Florence, seeing your beautiful smile in these photos reminds me of all 
+                    the wonderful moments we've shared. You're not just my girlfriend—you're 
+                    my best friend, my partner in crime, and the love of my life. 
+                    <span class="inline-block mx-1 animate-pulse text-sm sm:text-base">💕</span>
+                </p>
             </div>
 
-            <div class="game-card bg-gradient-to-r from-purple-400 to-pink-400 text-white" onclick="showGame('quiz')">
-                <div class="text-2xl sm:text-4xl mb-1 sm:mb-2">❓</div>
-                <span class="font-semibold text-xs sm:text-lg">Love Quiz</span>
+            <!-- Footer -->
+            <div class="mt-4 sm:mt-8 text-center px-2 pb-8">
+                <p class="text-pink-600 font-semibold text-sm sm:text-lg">
+                    With all my love, always 💝
+                </p>
+                <p class="text-pink-500 text-xs sm:text-sm mt-1 sm:mt-2">
+                    Tap anywhere, play games, or explore for more magic! ✨
+                </p>
             </div>
-
-            <div class="game-card bg-gradient-to-r from-red-400 to-orange-400 text-white" onclick="showGame('clicker')">
-                <div class="text-2xl sm:text-4xl mb-1 sm:mb-2">❤️</div>
-                <span class="font-semibold text-xs sm:text-lg">Heart Clicker</span>
-            </div>
-
-            <div class="game-card bg-gradient-to-r from-blue-400 to-purple-400 text-white" onclick="showGame('letter')">
-                <div class="text-2xl sm:text-4xl mb-1 sm:mb-2">💌</div>
-                <span class="font-semibold text-xs sm:text-lg">Love Letter</span>
-            </div>
-
-            <div class="game-card bg-gradient-to-r from-green-400 to-teal-400 text-white" onclick="createConfetti()">
-                <div class="text-2xl sm:text-4xl mb-1 sm:mb-2">🎉</div>
-                <span class="font-semibold text-xs sm:text-lg">Confetti Party</span>
-            </div>
-
-            <div class="game-card bg-gradient-to-r from-yellow-400 to-orange-400 text-white" onclick="changePhoto()">
-                <div class="text-2xl sm:text-4xl mb-1 sm:mb-2">📸</div>
-                <span class="font-semibold text-xs sm:text-lg">Surprise Photo</span>
-            </div>
-        </div>
-
-        <!-- Games Container -->
-        <div id="games-container" class="w-full max-w-xl sm:max-w-2xl mb-4"></div>
-
-        <!-- Personal Message -->
-        <div class="bg-gradient-to-r from-pink-100 to-red-100 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 max-w-xl sm:max-w-2xl w-full relative overflow-hidden mb-4 sm:mb-8">
-            <div class="absolute top-2 sm:top-4 right-2 sm:right-4 animate-pulse text-sm sm:text-base">💖</div>
-            <p class="text-xs sm:text-base md:text-lg text-gray-800 leading-relaxed text-center">
-                Florence, seeing your beautiful smile in these photos reminds me of all 
-                the wonderful moments we've shared. You're not just my girlfriend—you're 
-                my best friend, my partner in crime, and the love of my life. 
-                <span class="inline-block mx-1 animate-pulse text-sm sm:text-base">💕</span>
-            </p>
-        </div>
-
-        <!-- Footer -->
-        <div class="mt-4 sm:mt-8 text-center px-2">
-            <p class="text-pink-600 font-semibold text-sm sm:text-lg">
-                With all my love, always 💝
-            </p>
-            <p class="text-pink-500 text-xs sm:text-sm mt-1 sm:mt-2">
-                Tap anywhere, play games, or explore for more magic! ✨
-            </p>
         </div>
     </div>
 
