@@ -1,816 +1,606 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-
-export default function App() {
-  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-  const [hearts, setHearts] = useState([]);
-  const [showConfetti, setShowConfetti] = useState(false);
-  const [petalPosition, setPetalPosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
-  const [showFullPhoto, setShowFullPhoto] = useState(false);
-  const [activeGame, setActiveGame] = useState(null);
-  const [memoryGame, setMemoryGame] = useState({
-    cards: [],
-    flipped: [],
-    matched: [],
-    moves: 0,
-    gameOver: false
-  });
-  const [loveQuiz, setLoveQuiz] = useState({
-    currentQuestion: 0,
-    score: 0,
-    completed: false
-  });
-  const [clickerGame, setClickerGame] = useState({
-    hearts: 0,
-    multiplier: 1,
-    achievements: []
-  });
-  const [loveLetter, setLoveLetter] = useState('');
-  const [showLetter, setShowLetter] = useState(false);
-
-  // Florence's real photos
-  const florencePhotos = [
-    {
-      url: "https://image2url.com/r2/default/images/1770506370489-b79e04d1-aca7-4354-abc6-8aad9df292ff.jpg",
-      caption: "My amazing chef Florence 🍳✨",
-      alt: "Florence wearing a white chef hat and uniform with red scarf"
-    },
-    {
-      url: "https://image2url.com/r2/default/images/1770506350329-0690163a-e5c9-4811-ae21-8e68684cfcdd.jpg",
-      caption: "Beautiful Florence against the pink wall 💖",
-      alt: "Florence with braids wearing striped shirt against pink wall"
-    }
-  ];
-
-  // Memory game cards
-  const memoryCards = [
-    '❤️', '🌹', '💕', '💖', '💗', '💝', '🌸', '✨',
-    '❤️', '🌹', '💕', '💖', '💗', '💝', '🌸', '✨'
-  ];
-
-  // Love quiz questions
-  const quizQuestions = [
-    {
-      question: "What's my favorite thing about you?",
-      options: ["Your smile", "Your laugh", "Your kindness", "All of the above"],
-      correct: 3
-    },
-    {
-      question: "When did we first meet?",
-      options: ["At work", "Through friends", "Online", "Can't remember!"],
-      correct: 1
-    },
-    {
-      question: "What's your favorite food?",
-      options: ["Pizza", "Pasta", "Sushi", "Chocolate"],
-      correct: 2
-    },
-    {
-      question: "What makes you happiest?",
-      options: ["Cooking", "Spending time together", "Traveling", "All of these"],
-      correct: 3
-    }
-  ];
-
-  // Initialize memory game
-  useEffect(() => {
-    const shuffledCards = [...memoryCards].sort(() => Math.random() - 0.5);
-    setMemoryGame(prev => ({ ...prev, cards: shuffledCards }));
-  }, []);
-
-  // Auto-rotate photos
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentPhotoIndex((prev) => (prev + 1) % florencePhotos.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Create floating hearts
-  useEffect(() => {
-    const newHearts = Array.from({ length: 30 }, (_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      top: Math.random() * 100,
-      size: Math.random() * 24 + 8,
-      duration: Math.random() * 10 + 5,
-      delay: Math.random() * 5
-    }));
-    setHearts(newHearts);
-  }, []);
-
-  // Handle mouse move for interactive petals
-  const handleMouseMove = (e) => {
-    const { clientX, clientY } = e;
-    setPetalPosition({ x: clientX, y: clientY });
-  };
-
-  // Create confetti effect
-  const triggerConfetti = () => {
-    setShowConfetti(true);
-    setTimeout(() => setShowConfetti(false), 3000);
-  };
-
-  // Heart animation for photo hover
-  const [heartAnimation, setHeartAnimation] = useState(null);
-  const handlePhotoHover = (index) => {
-    setHeartAnimation({ index, scale: 1, opacity: 1 });
-    setTimeout(() => setHeartAnimation(null), 1000);
-  };
-
-  // Memory Game Functions
-  const handleCardClick = (index) => {
-    if (memoryGame.flipped.length === 2 || memoryGame.matched.includes(index)) return;
-    
-    const newFlipped = [...memoryGame.flipped, index];
-    setMemoryGame(prev => ({ ...prev, flipped: newFlipped }));
-
-    if (newFlipped.length === 2) {
-      const [first, second] = newFlipped;
-      setMemoryGame(prev => ({ ...prev, moves: prev.moves + 1 }));
-      
-      if (memoryGame.cards[first] === memoryGame.cards[second]) {
-        setMemoryGame(prev => ({
-          ...prev,
-          matched: [...prev.matched, first, second],
-          flipped: []
-        }));
-        
-        if ([...memoryGame.matched, first, second].length === memoryGame.cards.length) {
-          setMemoryGame(prev => ({ ...prev, gameOver: true }));
-          triggerConfetti();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Valentine's Day Florence! 💕</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+        body { 
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fdf2f8 0%, #fef3c7 100%);
+            min-height: 100vh;
         }
-      } else {
-        setTimeout(() => {
-          setMemoryGame(prev => ({ ...prev, flipped: [] }));
-        }, 1000);
-      }
-    }
-  };
-
-  // Love Quiz Functions
-  const handleQuizAnswer = (answerIndex) => {
-    if (answerIndex === quizQuestions[loveQuiz.currentQuestion].correct) {
-      setLoveQuiz(prev => ({ ...prev, score: prev.score + 1 }));
-    }
+        .floating-heart {
+            position: absolute;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .confetti {
+            position: absolute;
+            pointer-events: none;
+            z-index: 50;
+        }
+        .photo-container {
+            border: 4px solid white;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        .photo-container:hover {
+            transform: scale(1.02);
+        }
+        .game-card {
+            background: linear-gradient(135deg, #fbcfe8 0%, #f9a8d4 100%);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px -5px rgba(244, 114, 182, 0.3);
+        }
+        .game-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 25px -5px rgba(244, 114, 182, 0.4);
+        }
+        .memory-card {
+            background: linear-gradient(135deg, #fda4af 0%, #f472b6 100%);
+            border-radius: 0.75rem;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .memory-card:hover {
+            transform: scale(1.05);
+        }
+        .memory-card.flipped {
+            background: white;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative overflow-hidden">
+    <!-- Floating Hearts Background -->
+    <div id="hearts-container" class="fixed inset-0 pointer-events-none"></div>
     
-    if (loveQuiz.currentQuestion < quizQuestions.length - 1) {
-      setLoveQuiz(prev => ({ ...prev, currentQuestion: prev.currentQuestion + 1 }));
-    } else {
-      setLoveQuiz(prev => ({ ...prev, completed: true }));
-      triggerConfetti();
-    }
-  };
+    <!-- Confetti Container -->
+    <div id="confetti-container" class="fixed inset-0 pointer-events-none"></div>
 
-  // Clicker Game Functions
-  const handleClickHeart = () => {
-    const newHearts = clickerGame.hearts + clickerGame.multiplier;
-    setClickerGame(prev => ({ ...prev, hearts: newHearts }));
-    
-    // Achievement system
-    const achievements = [...clickerGame.achievements];
-    if (newHearts >= 10 && !achievements.includes('first_10')) {
-      achievements.push('first_10');
-      setClickerGame(prev => ({ ...prev, achievements }));
-    }
-    if (newHearts >= 50 && !achievements.includes('fifty_hearts')) {
-      achievements.push('fifty_hearts');
-      setClickerGame(prev => ({ ...prev, achievements }));
-    }
-    if (newHearts >= 100 && !achievements.includes('hundred_hearts')) {
-      achievements.push('hundred_hearts');
-      setClickerGame(prev => ({ ...prev, achievements }));
-    }
-  };
-
-  const buyMultiplier = () => {
-    if (clickerGame.hearts >= 20) {
-      setClickerGame(prev => ({
-        ...prev,
-        hearts: prev.hearts - 20,
-        multiplier: prev.multiplier + 1
-      }));
-    }
-  };
-
-  // Reset games
-  const resetMemoryGame = () => {
-    const shuffledCards = [...memoryCards].sort(() => Math.random() - 0.5);
-    setMemoryGame({
-      cards: shuffledCards,
-      flipped: [],
-      matched: [],
-      moves: 0,
-      gameOver: false
-    });
-  };
-
-  const resetQuiz = () => {
-    setLoveQuiz({
-      currentQuestion: 0,
-      score: 0,
-      completed: false
-    });
-  };
-
-  const resetClicker = () => {
-    setClickerGame({
-      hearts: 0,
-      multiplier: 1,
-      achievements: []
-    });
-  };
-
-  return (
-    <div 
-      className="min-h-screen bg-gradient-to-br from-pink-50 via-red-50 to-purple-50 relative overflow-hidden cursor-pointer"
-      onMouseMove={handleMouseMove}
-      onClick={triggerConfetti}
-    >
-      {/* Interactive Petals */}
-      {isHovering && (
-        <motion.div
-          className="absolute pointer-events-none z-50"
-          style={{ left: petalPosition.x - 20, top: petalPosition.y - 20 }}
-          animate={{ 
-            scale: [0, 1.2, 0],
-            rotate: [0, 180, 360]
-          }}
-          transition={{ duration: 0.8 }}
-        >
-          🌸
-        </motion.div>
-      )}
-
-      {/* Floating Hearts Background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {hearts.map((heart) => (
-          <motion.div
-            key={heart.id}
-            className="absolute text-pink-300 opacity-70"
-            style={{
-              left: `${heart.left}%`,
-              top: `${heart.top}%`,
-              fontSize: `${heart.size}px`
-            }}
-            animate={{
-              y: [-20, -100],
-              rotate: [0, 360],
-              opacity: [0.3, 0.8, 0.3]
-            }}
-            transition={{
-              duration: heart.duration,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: heart.delay
-            }}
-          >
-            ❤️
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Confetti Effect */}
-      {showConfetti && (
-        <div className="absolute inset-0 pointer-events-none z-50">
-          {[...Array(60)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute text-xl"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: '-10px',
-                color: ['#ff6b6b', '#ff8e8e', '#ffafaf', '#ffd1d1'][Math.floor(Math.random() * 4)]
-              }}
-              animate={{
-                y: ['0vh', '100vh'],
-                x: [0, Math.random() * 100 - 50],
-                rotate: [0, 360],
-                opacity: [1, 0]
-              }}
-              transition={{
-                duration: Math.random() * 2 + 1,
-                ease: "easeOut"
-              }}
-            >
-              {['❤️', '💕', '💖', '💗', '🌹', '🌸', '✨', '💝'][Math.floor(Math.random() * 8)]}
-            </motion.div>
-          ))}
+    <!-- Main Content -->
+    <div class="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-6">
+            <h1 class="text-4xl md:text-6xl font-bold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent mb-2">
+                Happy Valentine's Day!
+            </h1>
+            <h2 class="text-2xl md:text-4xl font-semibold text-pink-700 animate-pulse">
+                To My Beautiful Florence 💕
+            </h2>
         </div>
-      )}
 
-      {/* Main Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-center mb-6"
-        >
-          <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-red-600 mb-2">
-            Happy Valentine's Day!
-          </h1>
-          <motion.h2 
-            className="text-2xl md:text-4xl font-semibold text-pink-700"
-            animate={{ scale: [1, 1.05, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            To My Beautiful Florence 💕
-          </motion.h2>
-        </motion.div>
-
-        {/* Photo Showcase */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="relative w-full max-w-3xl mb-8"
-        >
-          <motion.div
-            className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white"
-            whileHover={{ scale: 1.02 }}
-            onHoverStart={() => handlePhotoHover(currentPhotoIndex)}
-            onHoverEnd={() => setHeartAnimation(null)}
-          >
-            <img
-              src={florencePhotos[currentPhotoIndex].url}
-              alt={florencePhotos[currentPhotoIndex].alt}
-              className="w-full h-auto object-cover"
-              onClick={() => setShowFullPhoto(true)}
-            />
-            
-            {heartAnimation && heartAnimation.index === currentPhotoIndex && (
-              <motion.div
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl"
-                animate={{ scale: heartAnimation.scale, opacity: heartAnimation.opacity }}
-                transition={{ duration: 1 }}
-              >
-                ❤️
-              </motion.div>
-            )}
-            
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-              <p className="text-white text-lg font-medium text-center">
-                {florencePhotos[currentPhotoIndex].caption}
-              </p>
-            </div>
-          </motion.div>
-
-          <div className="flex justify-center mt-4 space-x-2">
-            {florencePhotos.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentPhotoIndex(index)}
-                className={`w-3 h-3 rounded-full transition-all ${
-                  index === currentPhotoIndex ? 'bg-pink-500 scale-125' : 'bg-white/50 hover:bg-white'
-                }`}
-                aria-label={`View photo ${index + 1}`}
-              />
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Game Selection Menu */}
-        {!activeGame && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 max-w-4xl w-full"
-          >
-            <motion.button
-              className="bg-gradient-to-r from-pink-400 to-red-400 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all flex flex-col items-center justify-center gap-3"
-              whileHover={{ scale: 1.05, y: -5 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setActiveGame('memory')}
-            >
-              <div className="text-4xl">🎴</div>
-              <span className="font-semibold text-lg">Memory Match</span>
-              <span className="text-sm opacity-90">Find matching pairs!</span>
-            </motion.button>
-
-            <motion.button
-              className="bg-gradient-to-r from-purple-400 to-pink-400 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all flex flex-col items-center justify-center gap-3"
-              whileHover={{ scale: 1.05, y: -5 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setActiveGame('quiz')}
-            >
-              <div className="text-4xl">❓</div>
-              <span className="font-semibold text-lg">Love Quiz</span>
-              <span className="text-sm opacity-90">Test our connection!</span>
-            </motion.button>
-
-            <motion.button
-              className="bg-gradient-to-r from-red-400 to-orange-400 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all flex flex-col items-center justify-center gap-3"
-              whileHover={{ scale: 1.05, y: -5 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setActiveGame('clicker')}
-            >
-              <div className="text-4xl">❤️</div>
-              <span className="font-semibold text-lg">Heart Clicker</span>
-              <span className="text-sm opacity-90">Collect hearts!</span>
-            </motion.button>
-
-            <motion.button
-              className="bg-gradient-to-r from-blue-400 to-purple-400 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all flex flex-col items-center justify-center gap-3"
-              whileHover={{ scale: 1.05, y: -5 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setActiveGame('letter')}
-            >
-              <div className="text-4xl">💌</div>
-              <span className="font-semibold text-lg">Love Letter</span>
-              <span className="text-sm opacity-90">Write to me!</span>
-            </motion.button>
-
-            <motion.button
-              className="bg-gradient-to-r from-green-400 to-teal-400 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all flex flex-col items-center justify-center gap-3"
-              whileHover={{ scale: 1.05, y: -5 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={triggerConfetti}
-            >
-              <div className="text-4xl">🎉</div>
-              <span className="font-semibold text-lg">Confetti Party</span>
-              <span className="text-sm opacity-90">Celebrate love!</span>
-            </motion.button>
-
-            <motion.button
-              className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all flex flex-col items-center justify-center gap-3"
-              whileHover={{ scale: 1.05, y: -5 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                const randomIndex = Math.floor(Math.random() * florencePhotos.length);
-                setCurrentPhotoIndex(randomIndex);
-              }}
-            >
-              <div className="text-4xl">📸</div>
-              <span className="font-semibold text-lg">Surprise Photo</span>
-              <span className="text-sm opacity-90">New memories!</span>
-            </motion.button>
-          </motion.div>
-        )}
-
-        {/* Memory Game */}
-        {activeGame === 'memory' && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-2xl max-w-2xl w-full mb-6"
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-2xl font-bold text-pink-700">Memory Match 💕</h3>
-              <button
-                className="text-pink-600 hover:text-pink-800 font-semibold"
-                onClick={() => setActiveGame(null)}
-              >
-                Back
-              </button>
-            </div>
-            
-            <div className="text-center mb-4">
-              <p>Moves: {memoryGame.moves}</p>
-              {memoryGame.gameOver && (
-                <motion.p 
-                  className="text-green-600 font-bold text-lg"
-                  animate={{ scale: [1, 1.1, 1] }}
-                >
-                  🎉 Congratulations! You won! 🎉
-                </motion.p>
-              )}
-            </div>
-            
-            <div className="grid grid-cols-4 gap-2 mb-4">
-              {memoryGame.cards.map((card, index) => {
-                const isFlipped = memoryGame.flipped.includes(index) || memoryGame.matched.includes(index);
-                return (
-                  <motion.button
-                    key={index}
-                    className={`aspect-square bg-gradient-to-br from-pink-200 to-red-200 rounded-lg flex items-center justify-center text-2xl font-bold shadow-md ${
-                      isFlipped ? 'bg-white' : ''
-                    }`}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => handleCardClick(index)}
-                    disabled={memoryGame.flipped.length === 2 || memoryGame.matched.includes(index) || memoryGame.gameOver}
-                  >
-                    {isFlipped ? card : '?'}
-                  </motion.button>
-                );
-              })}
-            </div>
-            
-            <div className="flex justify-center gap-4">
-              <motion.button
-                className="bg-pink-500 text-white px-4 py-2 rounded-lg font-semibold"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={resetMemoryGame}
-              >
-                Reset Game
-              </motion.button>
-            </div>
-          </motion.div>
-        )}
-
-        {/* Love Quiz */}
-        {activeGame === 'quiz' && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-2xl max-w-2xl w-full mb-6"
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-2xl font-bold text-purple-700">Love Quiz 💖</h3>
-              <button
-                className="text-purple-600 hover:text-purple-800 font-semibold"
-                onClick={() => setActiveGame(null)}
-              >
-                Back
-              </button>
-            </div>
-            
-            {!loveQuiz.completed ? (
-              <div className="text-center">
-                <p className="text-lg mb-6">{quizQuestions[loveQuiz.currentQuestion].question}</p>
-                <div className="space-y-3">
-                  {quizQuestions[loveQuiz.currentQuestion].options.map((option, index) => (
-                    <motion.button
-                      key={index}
-                      className="w-full bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 p-3 rounded-lg font-medium transition-all"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => handleQuizAnswer(index)}
-                    >
-                      {option}
-                    </motion.button>
-                  ))}
+        <!-- Photo Showcase -->
+        <div class="relative w-full max-w-3xl mb-8">
+            <div class="photo-container" id="photo-container">
+                <img id="main-photo" src="https://image2url.com/r2/default/images/1770506370489-b79e04d1-aca7-4354-abc6-8aad9df292ff.jpg" alt="Florence" class="w-full h-auto">
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                    <p class="text-white text-lg font-medium text-center" id="photo-caption">
+                        My amazing chef Florence 🍳✨
+                    </p>
                 </div>
-                <p className="mt-4 text-sm text-gray-600">
-                  Question {loveQuiz.currentQuestion + 1} of {quizQuestions.length}
-                </p>
-              </div>
-            ) : (
-              <div className="text-center">
-                <motion.div
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 1, repeat: Infinity }}
-                  className="text-6xl mb-4"
-                >
-                  🎉
-                </motion.div>
-                <p className="text-2xl font-bold text-green-600 mb-2">
-                  Quiz Complete!
-                </p>
-                <p className="text-xl mb-4">
-                  Your score: {loveQuiz.score} / {quizQuestions.length}
-                </p>
-                <p className="text-lg mb-6">
-                  {loveQuiz.score === quizQuestions.length 
-                    ? "Perfect! You know me so well! 💕" 
-                    : loveQuiz.score >= quizQuestions.length / 2 
-                    ? "Great job! Our connection is strong! 💖" 
-                    : "Thanks for playing! Let's get to know each other better! 💗"}
-                </p>
-                <motion.button
-                  className="bg-purple-500 text-white px-6 py-3 rounded-lg font-semibold"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={resetQuiz}
-                >
-                  Play Again
-                </motion.button>
-              </div>
-            )}
-          </motion.div>
-        )}
+            </div>
 
-        {/* Heart Clicker Game */}
-        {activeGame === 'clicker' && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-2xl max-w-2xl w-full mb-6"
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-2xl font-bold text-red-700">Heart Clicker ❤️</h3>
-              <button
-                className="text-red-600 hover:text-red-800 font-semibold"
-                onClick={() => setActiveGame(null)}
-              >
-                Back
-              </button>
+            <div class="flex justify-center mt-4 space-x-2" id="photo-dots">
+                <button class="w-3 h-3 rounded-full bg-pink-500 scale-125"></button>
+                <button class="w-3 h-3 rounded-full bg-white/50 hover:bg-white"></button>
             </div>
-            
-            <div className="text-center mb-6">
-              <p className="text-3xl font-bold text-red-600 mb-2">
-                {clickerGame.hearts} ❤️
-              </p>
-              <p className="text-lg">Multiplier: x{clickerGame.multiplier}</p>
-            </div>
-            
-            <div className="flex justify-center mb-6">
-              <motion.button
-                className="text-6xl"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={handleClickHeart}
-              >
-                ❤️
-              </motion.button>
-            </div>
-            
-            <div className="flex justify-center gap-4 mb-4">
-              <motion.button
-                className={`px-4 py-2 rounded-lg font-semibold ${
-                  clickerGame.hearts >= 20 
-                    ? 'bg-orange-500 text-white' 
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                }`}
-                whileHover={clickerGame.hearts >= 20 ? { scale: 1.05 } : {}}
-                whileTap={clickerGame.hearts >= 20 ? { scale: 0.95 } : {}}
-                onClick={buyMultiplier}
-                disabled={clickerGame.hearts < 20}
-              >
-                Buy +1 Multiplier (20 ❤️)
-              </motion.button>
-            </div>
-            
-            {clickerGame.achievements.length > 0 && (
-              <div className="text-center">
-                <p className="font-semibold mb-2">Achievements:</p>
-                <div className="flex flex-wrap justify-center gap-2">
-                  {clickerGame.achievements.includes('first_10') && (
-                    <span className="bg-yellow-200 px-2 py-1 rounded text-sm">First 10 ❤️</span>
-                  )}
-                  {clickerGame.achievements.includes('fifty_hearts') && (
-                    <span className="bg-orange-200 px-2 py-1 rounded text-sm">50 Hearts! 🎉</span>
-                  )}
-                  {clickerGame.achievements.includes('hundred_hearts') && (
-                    <span className="bg-red-200 px-2 py-1 rounded text-sm">100 Hearts! 💖</span>
-                  )}
-                </div>
-              </div>
-            )}
-            
-            <div className="flex justify-center mt-4">
-              <motion.button
-                className="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={resetClicker}
-              >
-                Reset Game
-              </motion.button>
-            </div>
-          </motion.div>
-        )}
+        </div>
 
-        {/* Love Letter */}
-        {activeGame === 'letter' && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-2xl max-w-2xl w-full mb-6"
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-2xl font-bold text-blue-700">Love Letter 💌</h3>
-              <button
-                className="text-blue-600 hover:text-blue-800 font-semibold"
-                onClick={() => setActiveGame(null)}
-              >
-                Back
-              </button>
+        <!-- Game Selection Menu -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 max-w-4xl w-full" id="game-menu">
+            <div class="game-card bg-gradient-to-r from-pink-400 to-red-400 text-white" onclick="showGame('memory')">
+                <div class="text-4xl mb-2">🎴</div>
+                <span class="font-semibold text-lg">Memory Match</span>
+                <p class="text-sm opacity-90 mt-1">Find matching pairs!</p>
             </div>
-            
-            {!showLetter ? (
-              <div className="text-center">
-                <p className="mb-4">Write me a sweet message, Florence! 💕</p>
-                <textarea
-                  value={loveLetter}
-                  onChange={(e) => setLoveLetter(e.target.value)}
-                  placeholder="Type your loving message here..."
-                  className="w-full h-32 p-4 border-2 border-pink-200 rounded-lg focus:border-pink-400 focus:outline-none resize-none"
-                />
-                <motion.button
-                  className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-lg font-semibold mt-4"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setShowLetter(true)}
-                  disabled={!loveLetter.trim()}
-                >
-                  Send Love Letter 💌
-                </motion.button>
-              </div>
-            ) : (
-              <div className="text-center">
-                <motion.div
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 1, repeat: Infinity }}
-                  className="text-6xl mb-4"
-                >
-                  💌
-                </motion.div>
-                <p className="text-xl font-bold text-blue-600 mb-4">
-                  Thank you for your beautiful message!
-                </p>
-                <div className="bg-pink-50 p-4 rounded-lg mb-4">
-                  <p className="italic">"{loveLetter}"</p>
-                </div>
-                <p className="text-lg mb-6">
-                  Every word from you means the world to me, Florence! 💖
-                </p>
-                <motion.button
-                  className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => {
-                    setLoveLetter('');
-                    setShowLetter(false);
-                  }}
-                >
-                  Write Another Letter
-                </motion.button>
-              </div>
-            )}
-          </motion.div>
-        )}
 
-        {/* Personal Message */}
-        {!activeGame && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.4 }}
-            className="bg-gradient-to-r from-pink-100 to-red-100 rounded-2xl p-6 md:p-8 max-w-3xl w-full relative overflow-hidden"
-          >
-            <div className="absolute top-4 right-4 animate-pulse">💖</div>
-            <p className="text-base md:text-lg text-gray-800 leading-relaxed text-center">
-              Florence, seeing your beautiful smile in these photos reminds me of all 
-              the wonderful moments we've shared. You're not just my girlfriend—you're 
-              my best friend, my partner in crime, and the love of my life. 
-              <motion.span 
-                className="inline-block mx-1"
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                💕
-              </motion.span>
+            <div class="game-card bg-gradient-to-r from-purple-400 to-pink-400 text-white" onclick="showGame('quiz')">
+                <div class="text-4xl mb-2">❓</div>
+                <span class="font-semibold text-lg">Love Quiz</span>
+                <p class="text-sm opacity-90 mt-1">Test our connection!</p>
+            </div>
+
+            <div class="game-card bg-gradient-to-r from-red-400 to-orange-400 text-white" onclick="showGame('clicker')">
+                <div class="text-4xl mb-2">❤️</div>
+                <span class="font-semibold text-lg">Heart Clicker</span>
+                <p class="text-sm opacity-90 mt-1">Collect hearts!</p>
+            </div>
+
+            <div class="game-card bg-gradient-to-r from-blue-400 to-purple-400 text-white" onclick="showGame('letter')">
+                <div class="text-4xl mb-2">💌</div>
+                <span class="font-semibold text-lg">Love Letter</span>
+                <p class="text-sm opacity-90 mt-1">Write to me!</p>
+            </div>
+
+            <div class="game-card bg-gradient-to-r from-green-400 to-teal-400 text-white" onclick="createConfetti()">
+                <div class="text-4xl mb-2">🎉</div>
+                <span class="font-semibold text-lg">Confetti Party</span>
+                <p class="text-sm opacity-90 mt-1">Celebrate love!</p>
+            </div>
+
+            <div class="game-card bg-gradient-to-r from-yellow-400 to-orange-400 text-white" onclick="changePhoto()">
+                <div class="text-4xl mb-2">📸</div>
+                <span class="font-semibold text-lg">Surprise Photo</span>
+                <p class="text-sm opacity-90 mt-1">New memories!</p>
+            </div>
+        </div>
+
+        <!-- Games Container -->
+        <div id="games-container" class="w-full max-w-2xl"></div>
+
+        <!-- Personal Message -->
+        <div class="bg-gradient-to-r from-pink-100 to-red-100 rounded-2xl p-6 md:p-8 max-w-3xl w-full relative overflow-hidden mb-8">
+            <div class="absolute top-4 right-4 animate-pulse">💖</div>
+            <p class="text-base md:text-lg text-gray-800 leading-relaxed text-center">
+                Florence, seeing your beautiful smile in these photos reminds me of all 
+                the wonderful moments we've shared. You're not just my girlfriend—you're 
+                my best friend, my partner in crime, and the love of my life. 
+                <span class="inline-block mx-1 animate-pulse">💕</span>
             </p>
-          </motion.div>
-        )}
+        </div>
 
-        {/* Footer */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 2 }}
-          className="mt-8 text-center"
-        >
-          <p className="text-pink-600 font-semibold text-lg">
-            With all my love, always 💝
-          </p>
-          <p className="text-pink-500 text-sm mt-2">
-            Click anywhere, play games, or explore for more magic! ✨
-          </p>
-        </motion.div>
-      </div>
-
-      {/* Full Screen Photo Modal */}
-      {showFullPhoto && (
-        <motion.div
-          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={() => setShowFullPhoto(false)}
-        >
-          <motion.div
-            className="max-w-4xl w-full"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.8, opacity: 0 }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="relative">
-              <img
-                src={florencePhotos[currentPhotoIndex].url}
-                alt={florencePhotos[currentPhotoIndex].alt}
-                className="w-full max-h-[80vh] object-contain rounded-2xl"
-              />
-              <button
-                className="absolute top-4 right-4 bg-white/90 rounded-full p-2 hover:bg-white transition-colors"
-                onClick={() => setShowFullPhoto(false)}
-              >
-                ✕
-              </button>
-              <div className="absolute bottom-4 left-0 right-0 text-center">
-                <p className="text-white text-xl font-medium">{florencePhotos[currentPhotoIndex].caption}</p>
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
+        <!-- Footer -->
+        <div class="mt-8 text-center">
+            <p class="text-pink-600 font-semibold text-lg">
+                With all my love, always 💝
+            </p>
+            <p class="text-pink-500 text-sm mt-2">
+                Click anywhere, play games, or explore for more magic! ✨
+            </p>
+        </div>
     </div>
-  );
-}
+
+    <script>
+        // Photo data
+        const florencePhotos = [
+            {
+                url: "https://image2url.com/r2/default/images/1770506370489-b79e04d1-aca7-4354-abc6-8aad9df292ff.jpg",
+                caption: "My amazing chef Florence 🍳✨"
+            },
+            {
+                url: "https://image2url.com/r2/default/images/1770506350329-0690163a-e5c9-4811-ae21-8e68684cfcdd.jpg",
+                caption: "Beautiful Florence against the pink wall 💖"
+            }
+        ];
+
+        let currentPhotoIndex = 0;
+        let heartsInterval;
+        let confettiTimeout;
+
+        // Create floating hearts
+        function createFloatingHearts() {
+            const container = document.getElementById('hearts-container');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < 25; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = Math.random() * 100 + '%';
+                heart.style.fontSize = (Math.random() * 24 + 12) + 'px';
+                heart.style.opacity = '0.6';
+                container.appendChild(heart);
+                
+                // Animate heart
+                animateHeart(heart);
+            }
+        }
+
+        function animateHeart(heart) {
+            let y = parseFloat(heart.style.top);
+            const animation = setInterval(() => {
+                y -= 0.5;
+                if (y < -10) {
+                    y = 110;
+                }
+                heart.style.top = y + '%';
+            }, 50);
+            
+            // Rotate heart
+            let rotation = 0;
+            setInterval(() => {
+                rotation += 2;
+                heart.style.transform = `rotate(${rotation}deg)`;
+            }, 100);
+        }
+
+        // Create confetti
+        function createConfetti() {
+            const container = document.getElementById('confetti-container');
+            container.innerHTML = '';
+            
+            const emojis = ['❤️', '💕', '💖', '💗', '🌹', '🌸', '✨', '💝'];
+            const colors = ['#ff6b6b', '#ff8e8e', '#ffafaf', '#ffd1d1'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.color = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.fontSize = '1.5rem';
+                confetti.style.opacity = '1';
+                container.appendChild(confetti);
+                
+                // Animate confetti falling
+                const duration = Math.random() * 2000 + 1000;
+                const xMovement = (Math.random() - 0.5) * 100;
+                
+                confetti.animate([
+                    { transform: 'translateY(0px) translateX(0px)', opacity: 1 },
+                    { transform: `translateY(${window.innerHeight}px) translateX(${xMovement}px)`, opacity: 0 }
+                ], {
+                    duration: duration,
+                    easing: 'ease-out'
+                });
+            }
+            
+            // Clear confetti after animation
+            clearTimeout(confettiTimeout);
+            confettiTimeout = setTimeout(() => {
+                container.innerHTML = '';
+            }, 3000);
+        }
+
+        // Change photo
+        function changePhoto() {
+            currentPhotoIndex = (currentPhotoIndex + 1) % florencePhotos.length;
+            document.getElementById('main-photo').src = florencePhotos[currentPhotoIndex].url;
+            document.getElementById('photo-caption').textContent = florencePhotos[currentPhotoIndex].caption;
+            
+            // Update dots
+            const dots = document.getElementById('photo-dots').children;
+            for (let i = 0; i < dots.length; i++) {
+                if (i === currentPhotoIndex) {
+                    dots[i].className = 'w-3 h-3 rounded-full bg-pink-500 scale-125';
+                } else {
+                    dots[i].className = 'w-3 h-3 rounded-full bg-white/50 hover:bg-white';
+                }
+            }
+        }
+
+        // Auto-change photos
+        setInterval(changePhoto, 5000);
+
+        // Show game
+        function showGame(gameType) {
+            const container = document.getElementById('games-container');
+            
+            if (gameType === 'memory') {
+                container.innerHTML = `
+                    <div class="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-2xl">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-2xl font-bold text-pink-700">Memory Match 💕</h3>
+                            <button onclick="hideGame()" class="text-pink-600 hover:text-pink-800 font-semibold">Back</button>
+                        </div>
+                        <div class="text-center mb-4">
+                            <p>Moves: <span id="moves-count">0</span></p>
+                        </div>
+                        <div class="grid grid-cols-4 gap-2 mb-4" id="memory-grid">
+                            <!-- Cards will be generated here -->
+                        </div>
+                        <div class="flex justify-center">
+                            <button onclick="resetMemoryGame()" class="bg-pink-500 text-white px-4 py-2 rounded-lg font-semibold">Reset Game</button>
+                        </div>
+                    </div>
+                `;
+                initMemoryGame();
+            } else if (gameType === 'quiz') {
+                container.innerHTML = `
+                    <div class="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-2xl">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-2xl font-bold text-purple-700">Love Quiz 💖</h3>
+                            <button onclick="hideGame()" class="text-purple-600 hover:text-purple-800 font-semibold">Back</button>
+                        </div>
+                        <div class="text-center" id="quiz-content">
+                            <p class="text-lg mb-6">What's my favorite thing about you?</p>
+                            <div class="space-y-3">
+                                <button onclick="answerQuiz(0)" class="w-full bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 p-3 rounded-lg font-medium transition-all">Your smile</button>
+                                <button onclick="answerQuiz(1)" class="w-full bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 p-3 rounded-lg font-medium transition-all">Your laugh</button>
+                                <button onclick="answerQuiz(2)" class="w-full bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 p-3 rounded-lg font-medium transition-all">Your kindness</button>
+                                <button onclick="answerQuiz(3)" class="w-full bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 p-3 rounded-lg font-medium transition-all">All of the above</button>
+                            </div>
+                            <p class="mt-4 text-sm text-gray-600">Question 1 of 4</p>
+                        </div>
+                    </div>
+                `;
+            } else if (gameType === 'clicker') {
+                container.innerHTML = `
+                    <div class="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-2xl">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-2xl font-bold text-red-700">Heart Clicker ❤️</h3>
+                            <button onclick="hideGame()" class="text-red-600 hover:text-red-800 font-semibold">Back</button>
+                        </div>
+                        <div class="text-center mb-6">
+                            <p class="text-3xl font-bold text-red-600 mb-2" id="heart-count">0 ❤️</p>
+                            <p class="text-lg">Multiplier: x<span id="multiplier-count">1</span></p>
+                        </div>
+                        <div class="flex justify-center mb-6">
+                            <button onclick="clickHeart()" class="text-6xl hover:scale-110 transition-transform">❤️</button>
+                        </div>
+                        <div class="flex justify-center gap-4 mb-4">
+                            <button onclick="buyMultiplier()" id="buy-btn" class="px-4 py-2 rounded-lg font-semibold bg-gray-300 text-gray-500 cursor-not-allowed">
+                                Buy +1 Multiplier (20 ❤️)
+                            </button>
+                        </div>
+                    </div>
+                `;
+                initClickerGame();
+            } else if (gameType === 'letter') {
+                container.innerHTML = `
+                    <div class="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-2xl">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-2xl font-bold text-blue-700">Love Letter 💌</h3>
+                            <button onclick="hideGame()" class="text-blue-600 hover:text-blue-800 font-semibold">Back</button>
+                        </div>
+                        <div class="text-center">
+                            <p class="mb-4">Write me a sweet message, Florence! 💕</p>
+                            <textarea id="love-letter" placeholder="Type your loving message here..." class="w-full h-32 p-4 border-2 border-pink-200 rounded-lg focus:border-pink-400 focus:outline-none resize-none"></textarea>
+                            <button onclick="sendLetter()" id="send-letter-btn" class="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-lg font-semibold mt-4 opacity-50 cursor-not-allowed">
+                                Send Love Letter 💌
+                            </button>
+                        </div>
+                    </div>
+                `;
+                setupLetterValidation();
+            }
+        }
+
+        function hideGame() {
+            document.getElementById('games-container').innerHTML = '';
+        }
+
+        // Memory Game Logic
+        let memoryGame = {
+            cards: [],
+            flipped: [],
+            matched: [],
+            moves: 0
+        };
+
+        function initMemoryGame() {
+            const memoryCards = ['❤️', '🌹', '💕', '💖', '💗', '💝', '🌸', '✨'];
+            const allCards = [...memoryCards, ...memoryCards];
+            // Shuffle cards
+            for (let i = allCards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [allCards[i], allCards[j]] = [allCards[j], allCards[i]];
+            }
+            
+            memoryGame.cards = allCards;
+            memoryGame.flipped = [];
+            memoryGame.matched = [];
+            memoryGame.moves = 0;
+            
+            updateMemoryDisplay();
+        }
+
+        function updateMemoryDisplay() {
+            document.getElementById('moves-count').textContent = memoryGame.moves;
+            const grid = document.getElementById('memory-grid');
+            grid.innerHTML = '';
+            
+            memoryGame.cards.forEach((card, index) => {
+                const isFlipped = memoryGame.flipped.includes(index) || memoryGame.matched.includes(index);
+                const cardEl = document.createElement('div');
+                cardEl.className = `memory-card ${isFlipped ? 'flipped' : ''}`;
+                cardEl.innerHTML = isFlipped ? card : '?';
+                cardEl.onclick = () => flipCard(index);
+                grid.appendChild(cardEl);
+            });
+        }
+
+        function flipCard(index) {
+            if (memoryGame.flipped.length >= 2 || memoryGame.matched.includes(index)) return;
+            
+            memoryGame.flipped.push(index);
+            updateMemoryDisplay();
+            
+            if (memoryGame.flipped.length === 2) {
+                memoryGame.moves++;
+                document.getElementById('moves-count').textContent = memoryGame.moves;
+                
+                const [first, second] = memoryGame.flipped;
+                if (memoryGame.cards[first] === memoryGame.cards[second]) {
+                    memoryGame.matched.push(first, second);
+                    memoryGame.flipped = [];
+                    
+                    if (memoryGame.matched.length === memoryGame.cards.length) {
+                        setTimeout(() => {
+                            alert('🎉 Congratulations! You won! 🎉');
+                            createConfetti();
+                        }, 500);
+                    }
+                } else {
+                    setTimeout(() => {
+                        memoryGame.flipped = [];
+                        updateMemoryDisplay();
+                    }, 1000);
+                }
+            }
+        }
+
+        function resetMemoryGame() {
+            initMemoryGame();
+        }
+
+        // Quiz Logic
+        let quizState = {
+            currentQuestion: 0,
+            score: 0
+        };
+
+        const quizQuestions = [
+            {
+                question: "What's my favorite thing about you?",
+                options: ["Your smile", "Your laugh", "Your kindness", "All of the above"],
+                correct: 3
+            },
+            {
+                question: "When did we first meet?",
+                options: ["At work", "Through friends", "Online", "Can't remember!"],
+                correct: 1
+            },
+            {
+                question: "What's your favorite food?",
+                options: ["Pizza", "Pasta", "Sushi", "Chocolate"],
+                correct: 2
+            },
+            {
+                question: "What makes you happiest?",
+                options: ["Cooking", "Spending time together", "Traveling", "All of these"],
+                correct: 3
+            }
+        ];
+
+        function answerQuiz(answerIndex) {
+            if (answerIndex === quizQuestions[quizState.currentQuestion].correct) {
+                quizState.score++;
+            }
+            
+            if (quizState.currentQuestion < quizQuestions.length - 1) {
+                quizState.currentQuestion++;
+                updateQuizDisplay();
+            } else {
+                // Quiz complete
+                const result = quizState.score === quizQuestions.length 
+                    ? "Perfect! You know me so well! 💕" 
+                    : quizState.score >= quizQuestions.length / 2 
+                    ? "Great job! Our connection is strong! 💖" 
+                    : "Thanks for playing! Let's get to know each other better! 💗";
+                
+                document.getElementById('quiz-content').innerHTML = `
+                    <div class="text-center">
+                        <div class="text-6xl mb-4 animate-pulse">🎉</div>
+                        <p class="text-2xl font-bold text-green-600 mb-2">Quiz Complete!</p>
+                        <p class="text-xl mb-4">Your score: ${quizState.score} / ${quizQuestions.length}</p>
+                        <p class="text-lg mb-6">${result}</p>
+                        <button onclick="resetQuiz()" class="bg-purple-500 text-white px-6 py-3 rounded-lg font-semibold">Play Again</button>
+                    </div>
+                `;
+                createConfetti();
+            }
+        }
+
+        function updateQuizDisplay() {
+            const question = quizQuestions[quizState.currentQuestion];
+            document.getElementById('quiz-content').innerHTML = `
+                <p class="text-lg mb-6">${question.question}</p>
+                <div class="space-y-3">
+                    ${question.options.map((option, index) => 
+                        `<button onclick="answerQuiz(${index})" class="w-full bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 p-3 rounded-lg font-medium transition-all">${option}</button>`
+                    ).join('')}
+                </div>
+                <p class="mt-4 text-sm text-gray-600">Question ${quizState.currentQuestion + 1} of ${quizQuestions.length}</p>
+            `;
+        }
+
+        function resetQuiz() {
+            quizState = { currentQuestion: 0, score: 0 };
+            updateQuizDisplay();
+        }
+
+        // Clicker Game Logic
+        let clickerGame = {
+            hearts: 0,
+            multiplier: 1
+        };
+
+        function initClickerGame() {
+            updateClickerDisplay();
+        }
+
+        function clickHeart() {
+            clickerGame.hearts += clickerGame.multiplier;
+            updateClickerDisplay();
+        }
+
+        function buyMultiplier() {
+            if (clickerGame.hearts >= 20) {
+                clickerGame.hearts -= 20;
+                clickerGame.multiplier++;
+                updateClickerDisplay();
+            }
+        }
+
+        function updateClickerDisplay() {
+            document.getElementById('heart-count').textContent = `${clickerGame.hearts} ❤️`;
+            document.getElementById('multiplier-count').textContent = clickerGame.multiplier;
+            
+            const buyBtn = document.getElementById('buy-btn');
+            if (clickerGame.hearts >= 20) {
+                buyBtn.className = 'px-4 py-2 rounded-lg font-semibold bg-orange-500 text-white hover:bg-orange-600';
+                buyBtn.onclick = buyMultiplier;
+                buyBtn.disabled = false;
+            } else {
+                buyBtn.className = 'px-4 py-2 rounded-lg font-semibold bg-gray-300 text-gray-500 cursor-not-allowed';
+                buyBtn.onclick = null;
+                buyBtn.disabled = true;
+            }
+        }
+
+        // Letter Validation
+        function setupLetterValidation() {
+            const textarea = document.getElementById('love-letter');
+            const sendBtn = document.getElementById('send-letter-btn');
+            
+            textarea.addEventListener('input', () => {
+                if (textarea.value.trim()) {
+                    sendBtn.className = 'bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-lg font-semibold mt-4';
+                    sendBtn.onclick = sendLetter;
+                    sendBtn.disabled = false;
+                } else {
+                    sendBtn.className = 'bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-lg font-semibold mt-4 opacity-50 cursor-not-allowed';
+                    sendBtn.onclick = null;
+                    sendBtn.disabled = true;
+                }
+            });
+        }
+
+        function sendLetter() {
+            const letter = document.getElementById('love-letter').value;
+            if (!letter.trim()) return;
+            
+            document.getElementById('games-container').innerHTML = `
+                <div class="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-2xl text-center">
+                    <div class="text-6xl mb-4 animate-pulse">💌</div>
+                    <p class="text-xl font-bold text-blue-600 mb-4">Thank you for your beautiful message!</p>
+                    <div class="bg-pink-50 p-4 rounded-lg mb-4">
+                        <p class="italic">"${letter}"</p>
+                    </div>
+                    <p class="text-lg mb-6">Every word from you means the world to me, Florence! 💖</p>
+                    <button onclick="showGame('letter')" class="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold">Write Another Letter</button>
+                </div>
+            `;
+        }
+
+        // Initialize
+        createFloatingHearts();
+        
+        // Click anywhere for confetti
+        document.body.addEventListener('click', (e) => {
+            if (!e.target.closest('#games-container')) {
+                createConfetti();
+            }
+        });
+    </script>
+</body>
+</html>
+
